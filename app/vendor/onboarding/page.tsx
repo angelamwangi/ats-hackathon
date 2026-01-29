@@ -19,6 +19,33 @@ export default function VendorOnboarding() {
     const createVendor = useMutation(api.vendors.createVendor);
     const updateBranding = useMutation(api.vendors.updateVendorBranding);
 
+    // State Declarations
+    const [shopName, setShopName] = useState("");
+    const [keywords, setKeywords] = useState("");
+    const [description, setDescription] = useState("");
+    const [logoUrl, setLogoUrl] = useState("");
+    const [primaryColor, setPrimaryColor] = useState("#22c55e");
+    const [secondaryColor, setSecondaryColor] = useState("#000000");
+    const [saving, setSaving] = useState(false);
+    const [generating, setGenerating] = useState(false);
+
+    const generateDescription = useAction(api.branding.generateBrandDescription);
+
+    useEffect(() => {
+        if (vendor) {
+            if (vendor.onboardingStatus === "completed") {
+                router.replace("/vendor/dashboard");
+                return;
+            }
+            setShopName(vendor.shopName);
+            setDescription(vendor.description || "");
+            setLogoUrl(vendor.logoUrl || "");
+            if (vendor.brandConfig) {
+                setPrimaryColor(vendor.brandConfig.primaryColor);
+                setSecondaryColor(vendor.brandConfig.secondaryColor);
+            }
+        }
+    }, [vendor, router]);
     const handleSave = async () => {
         // Validation
         if (!shopName) return;
@@ -74,16 +101,6 @@ export default function VendorOnboarding() {
         );
     }
 
-    // Debug Logic
-
-    if (!vendor && !debugInfo) {
-        return (
-            <div className="h-screen flex items-center justify-center bg-black flex-col gap-4">
-                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                <p className="text-white text-xs uppercase tracking-widest">Syncing Identity...</p>
-            </div>
-        );
-    }
 
     return (
         <div className="min-h-screen bg-black text-white p-8 lg:p-12">
