@@ -7,7 +7,7 @@ export default function SSOCallbackPage() {
         <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center">
             <div className="text-center space-y-4">
                 <div className="w-16 h-16 border-4 border-white/10 border-t-primary rounded-full animate-spin mx-auto" />
-                <p className="text-white/40 font-bold uppercase tracking-widest text-xs">Completing sign in...</p>
+                <p className="text-white font-bold uppercase tracking-widest text-xs">Completing sign in...</p>
             </div>
             {/* This handles the OAuth callback token exchange */}
             <AuthenticateWithRedirectCallback
@@ -17,4 +17,5 @@ export default function SSOCallbackPage() {
         </div>
     );
 }
+
 

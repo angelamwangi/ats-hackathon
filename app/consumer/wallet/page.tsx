@@ -24,7 +24,7 @@ export default function WalletPage() {
         <div ref={containerRef} className="max-w-7xl mx-auto px-8 py-12">
             <header className="mb-12">
                 <h2 className="text-5xl font-black tracking-tight mb-4 uppercase">DIGITAL WALLET</h2>
-                <p className="text-white/40 max-w-xl text-lg font-medium leading-relaxed">
+                <p className="text-white max-w-xl text-lg font-medium leading-relaxed">
                     Manage your <span className="text-primary italic">Nexus Points</span>, direct balance, and escrow refunds.
                 </p>
             </header>
@@ -45,7 +45,7 @@ export default function WalletPage() {
                         </div>
 
                         <div className="mb-12">
-                            <p className="text-sm font-bold text-white/40 uppercase tracking-widest mb-2">Total Available Balance</p>
+                            <p className="text-sm font-bold text-white uppercase tracking-widest mb-2">Total Available Balance</p>
                             <p className="text-7xl font-black tracking-tighter">$2,420.50</p>
                         </div>
 
@@ -83,7 +83,7 @@ export default function WalletPage() {
             <section className="wallet-card">
                 <div className="flex items-center justify-between mb-8">
                     <h3 className="text-xl font-black tracking-tight uppercase">RECENT ACTIVITY</h3>
-                    <button className="text-xs font-bold text-white/40 hover:text-white transition-colors uppercase tracking-widest">View PDF Statement</button>
+                    <button className="text-xs font-bold text-white hover:text-white transition-colors uppercase tracking-widest">View PDF Statement</button>
                 </div>
 
                 <div className="space-y-4">
@@ -127,8 +127,8 @@ function TransactionRow({ name, date, amount, isPositive, type }: any) {
                 <div>
                     <p className="font-bold text-lg">{name}</p>
                     <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[10px] font-black uppercase text-white/20 border border-white/10 px-2 py-0.5 rounded-md">{type}</span>
-                        <span className="text-[10px] font-black uppercase text-white/40">{date}</span>
+                        <span className="text-[10px] font-black uppercase text-white border border-white/10 px-2 py-0.5 rounded-md">{type}</span>
+                        <span className="text-[10px] font-black uppercase text-white">{date}</span>
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@ function TransactionRow({ name, date, amount, isPositive, type }: any) {
                 <p className={cn("text-xl font-black tracking-tight", isPositive ? "text-green-500" : "text-white")}>
                     {amount}
                 </p>
-                <div className="flex items-center gap-1.5 justify-end mt-1 text-white/20">
+                <div className="flex items-center gap-1.5 justify-end mt-1 text-white">
                     <p className="text-[10px] font-black uppercase">Success</p>
                     <CheckCircle2 className="w-3 h-3 text-green-500/40" />
                 </div>
@@ -150,3 +150,4 @@ function CheckCircle2({ className }: { className?: string }) {
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
     )
 }
+

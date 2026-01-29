@@ -50,8 +50,11 @@ export default function MarketplacePage() {
     const cartCount = cartItems.reduce((acc: number, item: any) => acc + item.quantity, 0);
     const totalAmount = cartItems.reduce((acc: number, item: any) => acc + (item.product.price * item.quantity), 0);
 
+    const checkout = useMutation(api.orders.checkout);
+
     const handleCheckout = async () => {
         if (cartItems.length === 0) return;
+        if (!currentUser) return;
 
         const phone = prompt("Enter your M-Pesa number (e.g. 254712345678):");
         if (!phone) return;
@@ -60,7 +63,12 @@ export default function MarketplacePage() {
         try {
             const res = await initiateMpesa({ phoneNumber: phone, amount: totalAmount });
             if (res.ResponseCode === "0") {
-                alert("STK Push sent to your phone! Please enter your PIN to complete the purchase.");
+                await checkout({
+                    userId: currentUser._id,
+                    paymentMethod: "mpesa",
+                    phoneNumber: phone
+                });
+                alert("STK Push sent to your phone! Order placed successfully.");
                 setIsCartOpen(false);
             } else {
                 alert("Failed to initiate payment. Please try again.");
@@ -107,13 +115,13 @@ export default function MarketplacePage() {
                                     <span className="text-[10px] font-black text-primary uppercase tracking-widest">{totalPoints} Nexus Points</span>
                                 </div>
                             )}
-                            <p className="text-white/40 text-xs font-medium">Verify. Compare. Acquire.</p>
+                            <p className="text-white text-xs font-medium">Verify. Compare. Acquire.</p>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4">
                         <div className="relative group w-full md:w-80">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-primary transition-colors" />
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white group-focus-within:text-primary transition-colors" />
                             <input
                                 type="text"
                                 placeholder="Search the Nexus..."
@@ -127,7 +135,7 @@ export default function MarketplacePage() {
                             onClick={() => setIsCartOpen(true)}
                             className="relative w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-white/10 transition-all group"
                         >
-                            <ShoppingCart className="w-6 h-6 text-white/40 group-hover:text-primary transition-colors" />
+                            <ShoppingCart className="w-6 h-6 text-white group-hover:text-primary transition-colors" />
                             {cartCount > 0 && (
                                 <span className="absolute -top-2 -right-2 w-6 h-6 bg-primary text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.4)] animate-bounce-slow">
                                     {cartCount}
@@ -142,7 +150,7 @@ export default function MarketplacePage() {
             <div className="flex flex-col md:flex-row gap-8 items-start">
                 <div className="w-full md:w-64 shrink-0 space-y-8">
                     <div>
-                        <h4 className="text-[10px] font-black uppercase text-white/40 tracking-widest mb-4">Categories</h4>
+                        <h4 className="text-[10px] font-black uppercase text-white tracking-widest mb-4">Categories</h4>
                         <div className="space-y-2">
                             {categories.map(cat => (
                                 <button
@@ -150,7 +158,7 @@ export default function MarketplacePage() {
                                     onClick={() => setCategory(cat)}
                                     className={cn(
                                         "w-full text-left px-4 py-2 rounded-xl text-sm font-bold transition-all",
-                                        category === cat ? "bg-white text-black" : "text-white/40 hover:text-white hover:bg-white/5"
+                                        category === cat ? "bg-white text-black" : "text-white hover:text-white hover:bg-white/5"
                                     )}
                                 >
                                     {cat}
@@ -162,7 +170,7 @@ export default function MarketplacePage() {
                     <div className="p-6 bg-primary/10 border border-primary/20 rounded-3xl">
                         <ShieldCheck className="w-6 h-6 text-primary mb-4" />
                         <h4 className="font-bold text-sm mb-2 text-primary">NEXUS VERIFIED</h4>
-                        <p className="text-xs text-white/50 leading-relaxed">
+                        <p className="text-xs text-white leading-relaxed">
                             All vendors on Retail Nexus are vetted for quality and price transparency.
                         </p>
                     </div>
@@ -170,14 +178,14 @@ export default function MarketplacePage() {
 
                 <div className="flex-1">
                     <div className="flex items-center justify-between mb-8">
-                        <p className="text-sm font-bold text-white/40">
+                        <p className="text-sm font-bold text-white">
                             {products.filter((p: any) =>
                                 (category === "All" || p.category === category) &&
                                 (p.name.toLowerCase().includes(searchQuery.toLowerCase()))
                             ).length} Products Found
                         </p>
                         <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-white/40">Sort by:</span>
+                            <span className="text-xs font-bold text-white">Sort by:</span>
                             <select className="bg-transparent text-xs font-bold focus:outline-none">
                                 <option>Recommended</option>
                                 <option>Price: Low to High</option>
@@ -192,7 +200,7 @@ export default function MarketplacePage() {
                                 <div key={i} className="h-96 bg-white/5 rounded-[32px] animate-pulse" />
                             ))
                         ) : products.length === 0 ? (
-                            <div className="lg:col-span-3 py-20 text-center text-white/20">
+                            <div className="lg:col-span-3 py-20 text-center text-white">
                                 <ShoppingBag className="w-12 h-12 mx-auto mb-4 opacity-10" />
                                 <p className="text-sm font-bold uppercase tracking-widest">No products in the Nexus yet</p>
                             </div>
@@ -205,7 +213,7 @@ export default function MarketplacePage() {
 
                                 if (filtered.length === 0) {
                                     return (
-                                        <div className="lg:col-span-3 py-20 text-center text-white/20">
+                                        <div className="lg:col-span-3 py-20 text-center text-white">
                                             <p className="text-sm font-bold uppercase tracking-widest">No matches found</p>
                                         </div>
                                     );
@@ -236,7 +244,7 @@ export default function MarketplacePage() {
                         <div className="flex items-center justify-between mb-12">
                             <h3 className="text-3xl font-black uppercase tracking-tight">Your <span className="text-primary italic">Cart</span></h3>
                             <button onClick={() => setIsCartOpen(false)} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all">
-                                <Zap className="w-4 h-4 text-white/40" />
+                                <Zap className="w-4 h-4 text-white" />
                             </button>
                         </div>
 
@@ -255,7 +263,7 @@ export default function MarketplacePage() {
 
                         <div className="mt-12 pt-12 border-t border-white/10 space-y-6">
                             <div className="flex justify-between items-end">
-                                <p className="text-xs font-black uppercase tracking-widest text-white/40">Total Acquisition</p>
+                                <p className="text-xs font-black uppercase tracking-widest text-white">Total Acquisition</p>
                                 <p className="text-4xl font-black">${totalAmount.toFixed(2)}</p>
                             </div>
                             <button
@@ -298,7 +306,7 @@ function CartItem({ item }: { item: any }) {
             <div className="flex-1">
                 <div className="flex justify-between items-start">
                     <h4 className="font-bold text-sm uppercase truncate max-w-[150px]">{item.product?.name}</h4>
-                    <button onClick={() => removeItem({ cartId: item._id })} className="text-[10px] font-bold text-white/20 hover:text-red-500 transition-colors uppercase">Remove</button>
+                    <button onClick={() => removeItem({ cartId: item._id })} className="text-[10px] font-bold text-white hover:text-red-500 transition-colors uppercase">Remove</button>
                 </div>
                 <p className="text-xl font-black mb-2">${item.product?.price}</p>
                 <div className="flex items-center gap-3">
@@ -399,7 +407,7 @@ function ProductCard({
                     }}
                     className={cn(
                         "absolute top-4 right-4 p-2 rounded-full backdrop-blur-md transition-all z-20 group/heart",
-                        isWishlisted ? "bg-red-500/20 text-red-500" : "bg-black/40 text-white/40 hover:bg-white text-white hover:text-red-500"
+                        isWishlisted ? "bg-red-500/20 text-red-500" : "bg-black/40 text-white hover:bg-white text-white hover:text-red-500"
                     )}
                 >
                     <svg
@@ -419,7 +427,7 @@ function ProductCard({
                 <div className="absolute top-4 left-4 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-black text-primary border border-primary/20 flex items-center gap-1.5 uppercase z-10">
                     <Star className="w-3 h-3 fill-primary" /> Q-Score: {product.qualityRating}
                 </div>
-                <div className="absolute bottom-4 right-4 text-xs font-bold text-white/40 bg-black/40 px-2 py-1 rounded-md backdrop-blur-sm z-10">
+                <div className="absolute bottom-4 right-4 text-xs font-bold text-white bg-black/40 px-2 py-1 rounded-md backdrop-blur-sm z-10">
                     {product.category}
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -429,15 +437,15 @@ function ProductCard({
                 <Link href={`/consumer/product/${product._id}`}>
                     <h3 className="font-bold text-xl mb-1 hover:text-primary transition-colors">{product.name}</h3>
                 </Link>
-                <p className="text-xs text-white/40 font-bold tracking-widest uppercase mb-4">Vendor: Shop #{product.vendorId?.slice(-4) || "0000"}</p>
+                <p className="text-xs text-white font-bold tracking-widest uppercase mb-4">Vendor: Shop #{product.vendorId?.slice(-4) || "0000"}</p>
 
                 <div className="flex items-center justify-between mt-auto mb-6">
                     <div>
-                        <p className="text-[10px] font-black text-white/40 uppercase">Price</p>
+                        <p className="text-[10px] font-black text-white uppercase">Price</p>
                         <p className="text-2xl font-black">${product.price}</p>
                     </div>
                     <div className="text-right">
-                        <p className="text-[10px] font-black text-white/40 uppercase">Value Score</p>
+                        <p className="text-[10px] font-black text-white uppercase">Value Score</p>
                         <div className="flex items-center gap-1.5 justify-end">
                             <span className="text-sm font-bold text-green-500">{valueScore}</span>
                             <TrendingUp className="w-4 h-4 text-green-500" />
@@ -502,3 +510,4 @@ function ProductCard({
         </div>
     );
 }
+

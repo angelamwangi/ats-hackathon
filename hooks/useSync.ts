@@ -57,6 +57,7 @@ export function useSync(vendorId?: string) {
                                 totalAmount: order.totalAmount,
                                 source: "pos",
                                 offlineId: order.id,
+                                paymentMethod: order.paymentMethod,
                             });
                             await localDB.markAsSynced(order.id);
                         } catch (err) {

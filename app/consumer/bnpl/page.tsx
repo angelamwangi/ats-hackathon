@@ -59,13 +59,13 @@ export default function BNPLTrackerPage() {
             <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                     <h2 className="text-5xl font-black tracking-tight mb-4 uppercase">SAVE-TO-BUY</h2>
-                    <p className="text-white/40 max-w-xl text-lg font-medium leading-relaxed">
+                    <p className="text-white max-w-xl text-lg font-medium leading-relaxed">
                         Track your progressive payments. Items are automatically fulfilled once your savings reach 100%.
                     </p>
                 </div>
                 <div className="flex gap-4">
                     <div className="p-6 bg-white/5 border border-white/10 rounded-3xl">
-                        <p className="text-[10px] font-black text-white/40 uppercase mb-1">Total Escrow</p>
+                        <p className="text-[10px] font-black text-white uppercase mb-1">Total Escrow</p>
                         <p className="text-2xl font-black">
                             ${allPlans.reduce((acc: number, curr: any) => acc + curr.amountPaid, 0).toLocaleString()}
                         </p>
@@ -76,7 +76,7 @@ export default function BNPLTrackerPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {activePlans.length === 0 ? (
                     <div className="col-span-2 p-12 border border-dashed border-white/10 rounded-[40px] text-center">
-                        <p className="text-white/40 font-bold uppercase tracking-widest">No active savings plans</p>
+                        <p className="text-white font-bold uppercase tracking-widest">No active savings plans</p>
                     </div>
                 ) : (
                     activePlans.map((order: any) => (
@@ -93,10 +93,10 @@ export default function BNPLTrackerPage() {
             </div>
 
             <section className="mt-20">
-                <h3 className="text-xl font-black mb-8 uppercase tracking-widest text-white/40">COMPLETED ACQUISITIONS</h3>
+                <h3 className="text-xl font-black mb-8 uppercase tracking-widest text-white">COMPLETED ACQUISITIONS</h3>
                 <div className="space-y-4">
                     {completedPlans.length === 0 ? (
-                        <div className="p-8 text-center text-white/20 text-sm font-bold uppercase tracking-widest">
+                        <div className="p-8 text-center text-white text-sm font-bold uppercase tracking-widest">
                             No completed acquisitions yet
                         </div>
                     ) : (
@@ -152,7 +152,7 @@ function BNPLCard({ id, name, total, paid, image }: { id: string, name: string; 
                 <div className="flex justify-between items-start">
                     <div>
                         <h3 className="text-2xl font-black mb-1">{name}</h3>
-                        <p className="text-sm text-white/40 font-bold">Total Target: ${total.toLocaleString()}</p>
+                        <p className="text-sm text-white font-bold">Total Target: ${total.toLocaleString()}</p>
                     </div>
                 </div>
 
@@ -172,12 +172,12 @@ function BNPLCard({ id, name, total, paid, image }: { id: string, name: string; 
 
                 <div className="flex items-center justify-between pt-4 border-t border-white/5">
                     <div>
-                        <p className="text-[10px] font-black text-white/40 uppercase">Saved</p>
+                        <p className="text-[10px] font-black text-white uppercase">Saved</p>
                         <p className="text-xl font-black">${paid.toLocaleString()}</p>
                     </div>
                     <div className="text-right">
-                        <p className="text-[10px] font-black text-white/40 uppercase">Remaining</p>
-                        <p className="text-xl font-black text-white/40">${remaining.toLocaleString()}</p>
+                        <p className="text-[10px] font-black text-white uppercase">Remaining</p>
+                        <p className="text-xl font-black text-white">${remaining.toLocaleString()}</p>
                     </div>
                 </div>
 
@@ -200,12 +200,12 @@ function BNPLCard({ id, name, total, paid, image }: { id: string, name: string; 
 
                             <div className="mb-6">
                                 <h3 className="text-2xl font-black uppercase tracking-tight">Make a Deposit</h3>
-                                <p className="text-white/40 text-sm mt-1">Add funds to your savings jar.</p>
+                                <p className="text-white text-sm mt-1">Add funds to your savings jar.</p>
                             </div>
 
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-white/40">Amount (USD) - Max: ${remaining.toFixed(2)}</label>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-white">Amount (USD) - Max: ${remaining.toFixed(2)}</label>
                                     <input
                                         type="number"
                                         value={amount}
@@ -244,7 +244,7 @@ function BNPLCard({ id, name, total, paid, image }: { id: string, name: string; 
                                     Cancel Plan
                                 </button>
 
-                                <p className="text-[10px] text-white/20 text-center font-bold uppercase">
+                                <p className="text-[10px] text-white text-center font-bold uppercase">
                                     Secured by Daraja API • Simulation Mode
                                 </p>
                             </div>
@@ -265,12 +265,12 @@ function CompletedRow({ name, date, amount }: { name: string; date: string; amou
                 </div>
                 <div>
                     <p className="font-bold">{name}</p>
-                    <p className="text-[10px] font-black text-white/40 uppercase">{date}</p>
+                    <p className="text-[10px] font-black text-white uppercase">{date}</p>
                 </div>
             </div>
             <div className="flex items-center gap-8">
                 <div className="text-right">
-                    <p className="text-[10px] font-black text-white/40 uppercase">Total Paid</p>
+                    <p className="text-[10px] font-black text-white uppercase">Total Paid</p>
                     <p className="text-sm font-black">{amount}</p>
                 </div>
                 <button className="px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-black transition-all">
@@ -280,3 +280,4 @@ function CompletedRow({ name, date, amount }: { name: string; date: string; amou
         </div>
     );
 }
+

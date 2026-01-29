@@ -37,11 +37,11 @@ export default function AdminVendorsPage() {
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                     <h1 className="text-5xl font-black tracking-tighter uppercase">VENDOR GOVERNANCE</h1>
-                    <p className="text-white/40 font-medium">Approve new merchants and monitor KYC compliance.</p>
+                    <p className="text-white font-medium">Approve new merchants and monitor KYC compliance.</p>
                 </div>
                 <div className="flex gap-4">
                     <div className="relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-white transition-all" />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white group-focus-within:text-white transition-all" />
                         <input
                             type="text"
                             placeholder="Search by Vendor ID..."
@@ -63,13 +63,13 @@ export default function AdminVendorsPage() {
             <section className="admin-card bg-white/[0.03] border border-white/10 rounded-[48px] overflow-hidden">
                 <div className="p-8 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
                     <h3 className="text-xl font-black tracking-tight uppercase">KYC QUEUE</h3>
-                    <span className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">Live Assessment Layer Active</span>
+                    <span className="text-[10px] font-black text-white uppercase tracking-widest italic">Live Assessment Layer Active</span>
                 </div>
 
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="border-b border-white/5 text-[10px] font-black text-white/40 uppercase tracking-widest">
+                            <tr className="border-b border-white/5 text-[10px] font-black text-white uppercase tracking-widest">
                                 <th className="px-8 py-6">Merchant Entity</th>
                                 <th className="px-8 py-6">Category</th>
                                 <th className="px-8 py-6">Docs Status</th>
@@ -110,7 +110,7 @@ export default function AdminVendorsPage() {
 function GovernanceStat({ title, value, type }: any) {
     return (
         <div className="admin-card p-8 bg-white/[0.03] border border-white/10 rounded-[32px] group hover:border-white/20 transition-all">
-            <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">{title}</p>
+            <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">{title}</p>
             <div className="flex items-end justify-between">
                 <p className="text-4xl font-black tracking-tighter">{value}</p>
                 <div className={cn(
@@ -132,7 +132,7 @@ function KYCRow({ name, sub, cat, status, date }: any) {
             <td className="px-8 py-6">
                 <div>
                     <p className="font-bold text-sm tracking-tight">{name}</p>
-                    <p className="text-[10px] font-bold text-white/20 uppercase whitespace-nowrap">{sub}</p>
+                    <p className="text-[10px] font-bold text-white uppercase whitespace-nowrap">{sub}</p>
                 </div>
             </td>
             <td className="px-8 py-6">
@@ -149,7 +149,7 @@ function KYCRow({ name, sub, cat, status, date }: any) {
                 </div>
             </td>
             <td className="px-8 py-6">
-                <p className="text-[10px] font-bold text-white/40 uppercase">{date}</p>
+                <p className="text-[10px] font-bold text-white uppercase">{date}</p>
             </td>
             <td className="px-8 py-6 text-right">
                 <div className="flex items-center justify-end gap-2">
@@ -157,10 +157,11 @@ function KYCRow({ name, sub, cat, status, date }: any) {
                         REVIEW DOCS
                     </button>
                     <button className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
-                        <MoreVertical className="w-4 h-4 text-white/20" />
+                        <MoreVertical className="w-4 h-4 text-white" />
                     </button>
                 </div>
             </td>
         </tr>
     );
 }
+

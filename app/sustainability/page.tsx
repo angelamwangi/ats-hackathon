@@ -31,7 +31,7 @@ export default function SustainabilityHubPage() {
                     <Leaf className="w-3 h-3" /> Circular Economy Hub
                 </div>
                 <h2 className="text-7xl font-black tracking-tighter mb-6 uppercase leading-none">SUSTAINABILITY<br />PLATFORM</h2>
-                <p className="text-white/40 max-w-2xl text-xl font-medium leading-relaxed">
+                <p className="text-white max-w-2xl text-xl font-medium leading-relaxed">
                     Retail Nexus is committed to zero-waste commerce. Browse <span className="text-primary italic">Verified Pre-owned</span> goods, trade in old stock, and track your environmental impact.
                 </p>
             </header>
@@ -62,7 +62,7 @@ export default function SustainabilityHubPage() {
                 <section className="eco-card">
                     <div className="flex items-center justify-between mb-8">
                         <h3 className="text-2xl font-black tracking-tight uppercase">PASS-IT-ON: TRADE-INS</h3>
-                        <button className="text-xs font-bold text-white/40 hover:text-white transition-colors">START ASSESSMENT</button>
+                        <button className="text-xs font-bold text-white hover:text-white transition-colors">START ASSESSMENT</button>
                     </div>
                     <div className="space-y-4">
                         <TradeInRow name="iPhone 13 Pro" value="$450.00" status="Eligible" />
@@ -74,7 +74,7 @@ export default function SustainabilityHubPage() {
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[100px] -mr-32 -mt-32" />
                     <ShieldCheck className="w-12 h-12 text-primary mb-6" />
                     <h3 className="text-3xl font-black tracking-tight mb-4 uppercase">CERTIFIED PRE-OWNED</h3>
-                    <p className="text-sm text-white/50 leading-relaxed mb-8">
+                    <p className="text-sm text-white leading-relaxed mb-8">
                         Every pre-owned item on Retail Nexus undergoes a 42-point inspection by local master technicians. High quality, lower impact.
                     </p>
                     <button className="flex items-center gap-2 group-hover:gap-4 transition-all text-sm font-black text-primary uppercase tracking-widest">
@@ -94,14 +94,14 @@ function ImpactCard({ title, value, desc, icon, isPrimary }: any) {
         )}>
             <div className={cn(
                 "w-12 h-12 rounded-2xl flex items-center justify-center transition-all",
-                isPrimary ? "bg-black text-white" : "bg-white/5 text-white/40 group-hover:bg-white group-hover:text-black"
+                isPrimary ? "bg-black text-white" : "bg-white/5 text-white group-hover:bg-white group-hover:text-black"
             )}>
                 {icon}
             </div>
             <div className="mt-12">
                 <p className={cn("text-5xl font-black tracking-tighter mb-2", isPrimary ? "text-black" : "text-white")}>{value}</p>
                 <p className={cn("text-[10px] font-black uppercase tracking-widest opacity-40 mb-1", isPrimary ? "text-black" : "text-white")}>{title}</p>
-                <p className={cn("text-xs font-bold leading-tight", isPrimary ? "text-black/60" : "text-white/40")}>{desc}</p>
+                <p className={cn("text-xs font-bold leading-tight", isPrimary ? "text-black/60" : "text-white")}>{desc}</p>
             </div>
         </div>
     );
@@ -112,17 +112,18 @@ function TradeInRow({ name, value, status }: any) {
         <div className="flex items-center justify-between p-6 bg-white/[0.02] border border-white/5 rounded-3xl hover:bg-white/5 transition-all group">
             <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center">
-                    <Recycle className="w-5 h-5 text-white/20" />
+                    <Recycle className="w-5 h-5 text-white" />
                 </div>
                 <div>
                     <p className="font-bold text-lg">{name}</p>
-                    <p className="text-[10px] font-black text-white/40 uppercase">{status}</p>
+                    <p className="text-[10px] font-black text-white uppercase">{status}</p>
                 </div>
             </div>
             <div className="text-right">
-                <p className="text-[10px] font-black text-white/40 uppercase mb-1">Estimated Credit</p>
+                <p className="text-[10px] font-black text-white uppercase mb-1">Estimated Credit</p>
                 <p className="text-xl font-black">{value}</p>
             </div>
         </div>
     );
 }
+

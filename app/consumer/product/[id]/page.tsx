@@ -132,7 +132,7 @@ export default function ProductDetailPage() {
         <div className="max-w-7xl mx-auto px-8 py-12">
             <button
                 onClick={() => router.back()}
-                className="flex items-center gap-2 text-white/40 hover:text-white transition-colors mb-12 text-sm font-bold tracking-widest uppercase"
+                className="flex items-center gap-2 text-white hover:text-white transition-colors mb-12 text-sm font-bold tracking-widest uppercase"
             >
                 <ArrowLeft className="w-4 h-4" /> Back to Marketplace
             </button>
@@ -192,7 +192,7 @@ export default function ProductDetailPage() {
                                         onClick={() => setIsBnpl(false)}
                                         className={cn(
                                             "px-4 py-2 rounded-lg text-[10px] font-black uppercase transition-all",
-                                            !isBnpl ? "bg-white text-black" : "text-white/40 hover:text-white"
+                                            !isBnpl ? "bg-white text-black" : "text-white hover:text-white"
                                         )}
                                     >
                                         Direct Buy
@@ -201,7 +201,7 @@ export default function ProductDetailPage() {
                                         onClick={() => setIsBnpl(true)}
                                         className={cn(
                                             "px-4 py-2 rounded-lg text-[10px] font-black uppercase transition-all",
-                                            isBnpl ? "bg-primary text-black font-black" : "text-white/40 hover:text-white"
+                                            isBnpl ? "bg-primary text-black font-black" : "text-white hover:text-white"
                                         )}
                                     >
                                         Save-to-Buy
@@ -211,7 +211,7 @@ export default function ProductDetailPage() {
 
                             {isBnpl ? (
                                 <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                                    <p className="text-sm text-white/60 leading-relaxed">
+                                    <p className="text-sm text-white leading-relaxed">
                                         Start with a small deposit today. We&apos;ll hold your item and earn loyalty points as you complete your goal.
                                         <span className="text-primary font-bold ml-1 italic">95% refundable if you cancel.</span>
                                     </p>
@@ -221,14 +221,14 @@ export default function ProductDetailPage() {
                                             <p className="text-xl font-black">${(product.price / 4).toFixed(2)}</p>
                                         </div>
                                         <div className="p-4 bg-white/5 border border-white/10 rounded-2xl">
-                                            <p className="text-[10px] font-black text-white/40 uppercase mb-1">Duration</p>
+                                            <p className="text-[10px] font-black text-white uppercase mb-1">Duration</p>
                                             <p className="text-xl font-black">4 Weeks</p>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                                    <p className="text-sm text-white/60 leading-relaxed">
+                                    <p className="text-sm text-white leading-relaxed">
                                         Immediate ownership and fulfillment. Earn 2% back in Nexus loyalty points.
                                     </p>
                                 </div>
@@ -291,7 +291,7 @@ export default function ProductDetailPage() {
                                 <ArrowRightLeft className="w-6 h-6" />
                             </div>
                             <div>
-                                <p className="text-[10px] font-black text-white/40 uppercase">Circular Value</p>
+                                <p className="text-[10px] font-black text-white uppercase">Circular Value</p>
                                 <p className="text-sm font-bold">
                                     Buy-Back: <span className="text-primary">${product.buyBackValue || (product.price * 0.4).toFixed(2)}</span>
                                 </p>
@@ -302,7 +302,7 @@ export default function ProductDetailPage() {
                                 <ShieldCheck className="w-6 h-6" />
                             </div>
                             <div>
-                                <p className="text-[10px] font-black text-white/40 uppercase">Warranty</p>
+                                <p className="text-[10px] font-black text-white uppercase">Warranty</p>
                                 <p className="text-sm font-bold">Nexus Guard+ Included</p>
                             </div>
                         </div>
@@ -315,7 +315,7 @@ export default function ProductDetailPage() {
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h2 className="text-3xl font-black uppercase tracking-tighter italic">MARKET <span className="text-primary not-italic">INTELLIGENCE</span></h2>
-                        <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mt-1">Cross-platform semantic price verification powered by Gemini</p>
+                        <p className="text-white text-[10px] font-black uppercase tracking-widest mt-1">Cross-platform semantic price verification powered by Gemini</p>
                     </div>
                     <button
                         onClick={handleCompare}
@@ -330,13 +330,13 @@ export default function ProductDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {!marketIntel ? (
                         <div className="md:col-span-3 h-48 bg-white/[0.02] rounded-[40px] border border-dashed border-white/10 flex flex-col items-center justify-center opacity-40">
-                            <Info className="w-8 h-8 mb-4 text-white/40" />
+                            <Info className="w-8 h-8 mb-4 text-white" />
                             <p className="text-[10px] font-black uppercase tracking-[0.2em]">Scan market to compare prices</p>
                         </div>
                     ) : (
                         <>
                             <div className="p-8 bg-white/[0.03] border border-white/10 rounded-[40px] flex flex-col justify-center">
-                                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2">Market Position</p>
+                                <p className="text-[10px] font-black text-white uppercase tracking-widest mb-2">Market Position</p>
                                 <div className="flex items-end gap-3">
                                     <p className={cn(
                                         "text-5xl font-black tracking-tighter",
@@ -345,11 +345,11 @@ export default function ProductDetailPage() {
                                         {marketIntel.marketSummary.priceDifferencePercentage > 0 ? "+" : ""}
                                         {marketIntel.marketSummary.priceDifferencePercentage}%
                                     </p>
-                                    <p className="text-[10px] font-black text-white/40 leading-snug mb-2 uppercase">
+                                    <p className="text-[10px] font-black text-white leading-snug mb-2 uppercase">
                                         Value vs.<br />Market Low
                                     </p>
                                 </div>
-                                <p className="text-[10px] text-white/40 mt-6 font-bold uppercase tracking-widest">
+                                <p className="text-[10px] text-white mt-6 font-bold uppercase tracking-widest">
                                     Global Base: <span className="text-white">${marketIntel.marketSummary.lowestCompetitorPrice} / USD</span>
                                 </p>
                             </div>
@@ -365,8 +365,8 @@ export default function ProductDetailPage() {
                                                 )} />
                                             </div>
                                             <div>
-                                                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">{match.competitorName}</p>
-                                                <p className="text-xl font-black">${match.price.toFixed(2)} <span className="text-xs text-white/20 italic uppercase">{match.currency}</span></p>
+                                                <p className="text-[10px] font-black text-white uppercase tracking-widest">{match.competitorName}</p>
+                                                <p className="text-xl font-black">${match.price.toFixed(2)} <span className="text-xs text-white italic uppercase">{match.currency}</span></p>
                                             </div>
                                         </div>
 
@@ -381,9 +381,9 @@ export default function ProductDetailPage() {
                                                         style={{ width: `${match.matchConfidence * 100}%` }}
                                                     />
                                                 </div>
-                                                <span className="text-[8px] font-black text-white/40 uppercase">{(match.matchConfidence * 100).toFixed(0)}% MATCH</span>
+                                                <span className="text-[8px] font-black text-white uppercase">{(match.matchConfidence * 100).toFixed(0)}% MATCH</span>
                                             </div>
-                                            <p className="text-[9px] text-white/30 font-bold uppercase tracking-tighter line-clamp-1">{match.reasoning}</p>
+                                            <p className="text-[9px] text-white font-bold uppercase tracking-tighter line-clamp-1">{match.reasoning}</p>
                                         </div>
 
                                         <a
@@ -408,7 +408,7 @@ export default function ProductDetailPage() {
                     <Sparkles className="w-10 h-10 text-primary animate-pulse relative z-10" />
                     <div className="relative z-10">
                         <p className="text-sm font-black text-white uppercase tracking-widest">AI REPLENISHMENT ENABLED</p>
-                        <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest mt-1">Nudging acquisition at 80% consumption window (approx. {product.predictedUsageMonths * 30} days).</p>
+                        <p className="text-[10px] text-white font-bold uppercase tracking-widest mt-1">Nudging acquisition at 80% consumption window (approx. {product.predictedUsageMonths * 30} days).</p>
                     </div>
                 </div>
             )}

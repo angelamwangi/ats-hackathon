@@ -55,7 +55,7 @@ export default function NotFound() {
                     This sector is currently outside our monitoring range.
                 </h2>
 
-                <p className="text-white/40 font-medium max-w-md mb-12 leading-relaxed">
+                <p className="text-white font-medium max-w-md mb-12 leading-relaxed">
                     The resource you requested might have been moved, deleted, or is currently undergoing a deep-sync operation.
                 </p>
 
@@ -76,7 +76,7 @@ export default function NotFound() {
             </div>
 
             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-                <p className="text-[10px] font-black text-white/20 uppercase tracking-widest italic">System Status: Re-mapping Universe...</p>
+                <p className="text-[10px] font-black text-white uppercase tracking-widest italic">System Status: Re-mapping Universe...</p>
                 <div className="w-48 h-1 bg-white/5 rounded-full overflow-hidden">
                     <div className="h-full bg-primary/40 w-1/3 animate-[loading_3s_infinite_linear]" />
                 </div>
@@ -91,3 +91,4 @@ export default function NotFound() {
         </div>
     );
 }
+

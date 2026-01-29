@@ -65,7 +65,7 @@ export default function ConsumerLoyaltyPage() {
                 <h1 className="text-6xl font-black tracking-tighter uppercase leading-none">
                     Your <span className="text-primary">WealthHub</span>
                 </h1>
-                <p className="text-white/40 max-w-xl text-lg">
+                <p className="text-white max-w-xl text-lg">
                     Manage your loyalty status, tracks your rewards, and unlock exclusive merchant drops.
                 </p>
             </header>
@@ -80,7 +80,7 @@ export default function ConsumerLoyaltyPage() {
                                 <Flame className="w-4 h-4" /> 3-WEEK STREAK ACTIVE
                             </div>
                             <h3 className="text-2xl font-black uppercase tracking-tight">BNPL Power Boost</h3>
-                            <p className="text-sm text-white/40 max-w-[200px]">Keep your streak to unlock a $10 progress bonus!</p>
+                            <p className="text-sm text-white max-w-[200px]">Keep your streak to unlock a $10 progress bonus!</p>
                         </div>
                         <div className="mt-8 flex items-center justify-between">
                             <div className="flex gap-1">
@@ -102,7 +102,7 @@ export default function ConsumerLoyaltyPage() {
                             <Sparkles className="w-4 h-4" /> SMART PREDICTION
                         </div>
                         <h3 className="text-2xl font-black uppercase tracking-tight">Run Low Reminder</h3>
-                        <p className="text-sm text-white/40">You're likely 85% through your last coffee purchase. Restock now?</p>
+                        <p className="text-sm text-white">You're likely 85% through your last coffee purchase. Restock now?</p>
                         <button className="w-full py-4 bg-primary text-black font-black uppercase text-[10px] tracking-widest rounded-xl flex items-center justify-center gap-2 group">
                             Secure Restock <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-all" />
                         </button>
@@ -116,7 +116,7 @@ export default function ConsumerLoyaltyPage() {
                     <h2 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
                         <CreditCard className="w-6 h-6 text-primary" /> Verified Loyalty Cards
                     </h2>
-                    <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">{loyaltyCards?.length || 0} ACTIVE CARDS</span>
+                    <span className="text-[10px] font-black text-white uppercase tracking-widest">{loyaltyCards?.length || 0} ACTIVE CARDS</span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -137,12 +137,12 @@ export default function ConsumerLoyaltyPage() {
                                                 {card.logoUrl ? (
                                                     <img src={card.logoUrl} alt="logo" className="w-full h-full object-contain" />
                                                 ) : (
-                                                    <Sparkles className="w-5 h-5 text-white/20" />
+                                                    <Sparkles className="w-5 h-5 text-white" />
                                                 )}
                                             </div>
                                             <div className="space-y-0.5">
                                                 <h4 className="font-black uppercase text-sm tracking-tight">{card.vendorName}</h4>
-                                                <div className="flex items-center gap-1 text-[8px] font-black uppercase tracking-widest text-white/40">
+                                                <div className="flex items-center gap-1 text-[8px] font-black uppercase tracking-widest text-white">
                                                     <ShieldCheck className="w-2.5 h-2.5" /> ID: {card._id.slice(-6)}
                                                 </div>
                                             </div>
@@ -157,13 +157,13 @@ export default function ConsumerLoyaltyPage() {
                                     <div className="space-y-4">
                                         <div className="flex items-end justify-between">
                                             <div>
-                                                <div className="text-[10px] font-black uppercase text-white/40 mb-1">Nexus Balance</div>
+                                                <div className="text-[10px] font-black uppercase text-white mb-1">Nexus Balance</div>
                                                 <div className="text-3xl font-black tracking-tighter flex items-baseline gap-1">
-                                                    {card.points} <span className="text-xs uppercase text-white/20">pts</span>
+                                                    {card.points} <span className="text-xs uppercase text-white">pts</span>
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-[8px] font-black uppercase text-white/40 mb-1">Next Reward</div>
+                                                <div className="text-[8px] font-black uppercase text-white mb-1">Next Reward</div>
                                                 <div className="text-xs font-bold">5-Star Verification</div>
                                             </div>
                                         </div>
@@ -186,12 +186,12 @@ export default function ConsumerLoyaltyPage() {
 
                     {/* Empty State / Discovery */}
                     <div className="loyalty-card h-64 rounded-[32px] border border-dashed border-white/10 flex flex-col items-center justify-center p-8 space-y-4 hover:border-primary/40 transition-all cursor-pointer group">
-                        <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/40 group-hover:bg-primary group-hover:text-black transition-all">
+                        <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-primary group-hover:text-black transition-all">
                             <Gift className="w-6 h-6" />
                         </div>
                         <div className="text-center">
                             <h4 className="font-black uppercase text-sm tracking-tight">Explore More Perks</h4>
-                            <p className="text-xs text-white/20 mt-1">Visit new verified shops to unlock loyalty status.</p>
+                            <p className="text-xs text-white mt-1">Visit new verified shops to unlock loyalty status.</p>
                         </div>
                     </div>
                 </div>
@@ -208,7 +208,7 @@ export default function ConsumerLoyaltyPage() {
                         <h2 className="text-4xl font-black uppercase tracking-tight leading-none">
                             Guaranteed <span className="text-primary italic">Buy-Back</span> Cycle
                         </h2>
-                        <p className="text-white/40 text-lg leading-relaxed">
+                        <p className="text-white text-lg leading-relaxed">
                             Every verified tech and appliance purchase comes with a dynamic trade-in quote. Turn your past upgrades into your next big asset.
                         </p>
                         <ul className="space-y-3">
@@ -233,3 +233,4 @@ export default function ConsumerLoyaltyPage() {
         </div>
     );
 }
+

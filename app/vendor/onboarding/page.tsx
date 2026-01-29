@@ -99,7 +99,7 @@ export default function VendorOnboarding() {
         return (
             <div className="h-screen flex items-center justify-center bg-black flex-col gap-4">
                 <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                <p className="text-white/40 text-xs uppercase tracking-widest">Syncing Identity...</p>
+                <p className="text-white text-xs uppercase tracking-widest">Syncing Identity...</p>
             </div>
         );
     }
@@ -114,7 +114,7 @@ export default function VendorOnboarding() {
                     <h1 className="text-6xl font-black tracking-tighter uppercase leading-none">
                         Define Your <span className="text-primary">Empire</span>
                     </h1>
-                    <p className="text-white/40 max-w-xl text-lg">
+                    <p className="text-white max-w-xl text-lg">
                         Customize how your retail ecosystem looks and feels. Your brand colors will theme your POS and customer receipts.
                     </p>
                 </header>
@@ -126,7 +126,7 @@ export default function VendorOnboarding() {
                             <h3 className="text-sm font-black uppercase tracking-widest text-primary/60">Shop Details</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="text-[10px] font-black uppercase text-white/40 mb-2 block">Shop Name</label>
+                                    <label className="text-[10px] font-black uppercase text-white mb-2 block">Shop Name</label>
                                     <input
                                         value={shopName}
                                         onChange={(e) => setShopName(e.target.value)}
@@ -134,7 +134,7 @@ export default function VendorOnboarding() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-black uppercase text-white/40 mb-2 block">Brand Description</label>
+                                    <label className="text-[10px] font-black uppercase text-white mb-2 block">Brand Description</label>
 
                                     {/* AI Generator Input */}
                                     <div className="mb-3 p-3 bg-primary/5 border border-primary/20 rounded-xl space-y-2">
@@ -187,7 +187,7 @@ export default function VendorOnboarding() {
                             <h3 className="text-sm font-black uppercase tracking-widest text-primary/60">Branding</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-[10px] font-black uppercase text-white/40 mb-2 block">Primary Color</label>
+                                    <label className="text-[10px] font-black uppercase text-white mb-2 block">Primary Color</label>
                                     <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-2">
                                         <input
                                             type="color"
@@ -199,7 +199,7 @@ export default function VendorOnboarding() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-black uppercase text-white/40 mb-2 block">Accent Color</label>
+                                    <label className="text-[10px] font-black uppercase text-white mb-2 block">Accent Color</label>
                                     <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-2">
                                         <input
                                             type="color"
@@ -212,7 +212,7 @@ export default function VendorOnboarding() {
                                 </div>
                             </div>
                             <div>
-                                <label className="text-[10px] font-black uppercase text-white/40 mb-2 block">Logo URL (Optional)</label>
+                                <label className="text-[10px] font-black uppercase text-white mb-2 block">Logo URL (Optional)</label>
                                 <div className="relative">
                                     <input
                                         value={logoUrl}
@@ -220,7 +220,7 @@ export default function VendorOnboarding() {
                                         placeholder="https://your-brand.com/logo.png"
                                         className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 pl-14 outline-none focus:border-primary/50 transition-all"
                                     />
-                                    <Upload className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                                    <Upload className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white" />
                                 </div>
                             </div>
                         </section>
@@ -252,14 +252,14 @@ export default function VendorOnboarding() {
                                     {logoUrl ? (
                                         <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
                                     ) : (
-                                        <Store className="w-8 h-8 text-white/20" />
+                                        <Store className="w-8 h-8 text-white" />
                                     )}
                                 </div>
                                 <div className="space-y-1">
                                     <h4 className="text-2xl font-black uppercase tracking-tighter">{shopName}</h4>
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: primaryColor }} />
-                                        <span className="text-[10px] font-black uppercase text-white/40 tracking-widest">Active System</span>
+                                        <span className="text-[10px] font-black uppercase text-white tracking-widest">Active System</span>
                                     </div>
                                 </div>
                             </div>
@@ -271,13 +271,13 @@ export default function VendorOnboarding() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="p-4 rounded-2xl border border-white/5 bg-black/40" style={{ borderColor: `${primaryColor}20` }}>
-                                    <div className="text-[8px] font-black uppercase text-white/40 mb-1">POS Status</div>
+                                    <div className="text-[8px] font-black uppercase text-white mb-1">POS Status</div>
                                     <div className="text-sm font-bold flex items-center gap-2">
                                         <CheckCircle2 className="w-4 h-4" style={{ color: primaryColor }} /> Ready
                                     </div>
                                 </div>
                                 <div className="p-4 rounded-2xl border border-white/5 bg-black/40" style={{ borderColor: `${primaryColor}20` }}>
-                                    <div className="text-[8px] font-black uppercase text-white/40 mb-1">Theme</div>
+                                    <div className="text-[8px] font-black uppercase text-white mb-1">Theme</div>
                                     <div className="text-sm font-bold uppercase tracking-widest">Custom</div>
                                 </div>
                             </div>
@@ -294,7 +294,7 @@ export default function VendorOnboarding() {
 
                         <div className="p-6 bg-primary/5 border border-primary/10 rounded-3xl flex gap-4">
                             <Palette className="w-6 h-6 text-primary shrink-0" />
-                            <p className="text-xs text-white/60 leading-relaxed">
+                            <p className="text-xs text-white leading-relaxed">
                                 Tip: Use a primary color that has high contrast against dark backgrounds for the best POS experience.
                             </p>
                         </div>
@@ -304,3 +304,4 @@ export default function VendorOnboarding() {
         </div>
     );
 }
+

@@ -27,6 +27,12 @@ export const getDashboardMetrics = query({
             .withIndex("by_vendor", (q) => q.eq("vendorId", args.vendorId))
             .collect();
 
+        // Fetch product visits
+        const allVisits = await ctx.db
+            .query("productVisits")
+            .withIndex("by_vendor", (q) => q.eq("vendorId", args.vendorId))
+            .collect();
+
         // Calculate revenue metrics
         const calcRevenue = (orders: typeof allOrders) =>
             orders.reduce((sum, o) => sum + o.totalAmount, 0);
@@ -151,7 +157,12 @@ export const getDashboardMetrics = query({
                 name,
                 ...stats,
             })),
+
             trend: dailyRevenue,
+            views: {
+                total: allVisits.length,
+                conversionRate: allVisits.length > 0 ? Number(((orderCount / allVisits.length) * 100).toFixed(1)) : 0
+            }
         };
     },
 });

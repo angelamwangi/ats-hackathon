@@ -84,7 +84,7 @@ export default function SaveToBuyConfigPage() {
             <div className="max-w-6xl mx-auto">
                 <button
                     onClick={() => router.back()}
-                    className="flex items-center gap-2 text-white/40 hover:text-white transition-colors mb-12 text-sm font-bold tracking-widest uppercase"
+                    className="flex items-center gap-2 text-white hover:text-white transition-colors mb-12 text-sm font-bold tracking-widest uppercase"
                 >
                     <ArrowLeft className="w-4 h-4" /> Cancel Plan
                 </button>
@@ -112,7 +112,7 @@ export default function SaveToBuyConfigPage() {
                                 </div>
                                 <div>
                                     <p className="font-bold text-lg">Goal-Based Savings</p>
-                                    <p className="text-sm text-white/40">Item reserved immediately. Ships when 100% paid.</p>
+                                    <p className="text-sm text-white">Item reserved immediately. Ships when 100% paid.</p>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +122,7 @@ export default function SaveToBuyConfigPage() {
                     <div className="p-10 bg-white/[0.03] border border-white/10 rounded-[40px] space-y-10">
                         <div>
                             <h2 className="text-2xl font-black uppercase tracking-widest mb-2">Configure Plan</h2>
-                            <p className="text-white/40">Customize your "Lipa Mdogo Mdogo" schedule.</p>
+                            <p className="text-white">Customize your "Lipa Mdogo Mdogo" schedule.</p>
                         </div>
 
                         <div className="space-y-6">
@@ -139,7 +139,7 @@ export default function SaveToBuyConfigPage() {
                                     onChange={(e) => setDuration(parseInt(e.target.value))}
                                     className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary"
                                 />
-                                <div className="flex justify-between text-xs text-white/20 mt-2 font-bold uppercase">
+                                <div className="flex justify-between text-xs text-white mt-2 font-bold uppercase">
                                     <span>1 Mo</span>
                                     <span>12 Mo</span>
                                 </div>
@@ -156,7 +156,7 @@ export default function SaveToBuyConfigPage() {
                                                 "py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border",
                                                 interval === opt
                                                     ? "bg-primary text-black border-primary"
-                                                    : "bg-white/5 border-white/5 text-white/40 hover:bg-white/10"
+                                                    : "bg-white/5 border-white/5 text-white hover:bg-white/10"
                                             )}
                                         >
                                             {opt}
@@ -168,12 +168,12 @@ export default function SaveToBuyConfigPage() {
 
                         <div className="p-8 bg-black/40 rounded-3xl border border-white/10 space-y-4">
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-white/40 font-bold uppercase">Installment</span>
-                                <span className="text-2xl font-black">${installmentAmount.toFixed(2)} <span className="text-sm text-white/40 font-bold">/ {intervalLabel}</span></span>
+                                <span className="text-sm text-white font-bold uppercase">Installment</span>
+                                <span className="text-2xl font-black">${installmentAmount.toFixed(2)} <span className="text-sm text-white font-bold">/ {intervalLabel}</span></span>
                             </div>
                             <div className="h-px bg-white/10" />
                             <div className="flex justify-between items-center text-sm">
-                                <span className="text-white/40 font-bold uppercase">Unlock Date</span>
+                                <span className="text-white font-bold uppercase">Unlock Date</span>
                                 <span className="font-bold text-white">{endDate.toLocaleDateString()}</span>
                             </div>
                         </div>

@@ -25,6 +25,8 @@ import {
     DollarSign,
     Layers,
     ChevronRight,
+    Eye,
+    Activity,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -104,7 +106,7 @@ export default function VendorAnalyticsPage() {
             <div className="flex items-center justify-center h-[60vh]">
                 <div className="text-center space-y-4">
                     <div className="w-16 h-16 border-4 border-white/10 border-t-primary rounded-full animate-spin mx-auto" />
-                    <p className="text-white/40 font-bold uppercase tracking-widest text-xs">Loading Analytics...</p>
+                    <p className="text-white font-bold uppercase tracking-widest text-xs">Loading Analytics...</p>
                 </div>
             </div>
         );
@@ -122,9 +124,9 @@ export default function VendorAnalyticsPage() {
                         <BarChart3 className="w-3 h-3" /> ANALYTICS COMMAND CENTER
                     </div>
                     <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase">
-                        {vendor?.shopName || "VENDOR"} <span className="text-white/20">INSIGHTS</span>
+                        {vendor?.shopName || "VENDOR"} <span className="text-white">INSIGHTS</span>
                     </h1>
-                    <p className="text-white/40 font-medium mt-1">Data-driven intelligence to maximize your sales.</p>
+                    <p className="text-white font-medium mt-1">Data-driven intelligence to maximize your sales.</p>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -138,7 +140,7 @@ export default function VendorAnalyticsPage() {
                                     "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
                                     dateRange === range
                                         ? "bg-white text-black"
-                                        : "text-white/40 hover:text-white"
+                                        : "text-white hover:text-white"
                                 )}
                             >
                                 {range === "all" ? "All Time" : range}
@@ -159,7 +161,7 @@ export default function VendorAnalyticsPage() {
             </header>
 
             {/* Key Metrics Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <MetricCard
                     title="Revenue"
                     value={`$${getRevenueByRange().toLocaleString()}`}
@@ -182,6 +184,20 @@ export default function VendorAnalyticsPage() {
                     color={primaryColor}
                 />
                 <MetricCard
+                    title="Product Views"
+                    value={metrics.views?.total.toLocaleString() || "0"}
+                    subtext="store traffic"
+                    icon={<Eye className="w-5 h-5" />}
+                    color={primaryColor}
+                />
+                <MetricCard
+                    title="Conversion Rate"
+                    value={`${metrics.views?.conversionRate || 0}%`}
+                    subtext="view to order"
+                    icon={<Activity className="w-5 h-5" />}
+                    color={primaryColor}
+                />
+                <MetricCard
                     title="Quality Score"
                     value={metrics.products.avgQualityRating.toFixed(1)}
                     subtext="avg rating"
@@ -197,16 +213,16 @@ export default function VendorAnalyticsPage() {
                     <div className="flex items-center justify-between mb-8">
                         <div>
                             <h3 className="text-xl font-black tracking-tight uppercase">Revenue Trend</h3>
-                            <p className="text-xs text-white/40 mt-1">Last 30 days</p>
+                            <p className="text-xs text-white mt-1">Last 30 days</p>
                         </div>
                         <div className="flex items-center gap-4 text-xs">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: primaryColor }} />
-                                <span className="text-white/40">Revenue</span>
+                                <span className="text-white">Revenue</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full bg-white/20" />
-                                <span className="text-white/40">Orders</span>
+                                <span className="text-white">Orders</span>
                             </div>
                         </div>
                     </div>
@@ -235,7 +251,7 @@ export default function VendorAnalyticsPage() {
                             );
                         })}
                     </div>
-                    <div className="flex justify-between mt-4 text-[10px] text-white/30 font-bold">
+                    <div className="flex justify-between mt-4 text-[10px] text-white font-bold">
                         <span>{metrics.trend[0]?.date}</span>
                         <span>{metrics.trend[metrics.trend.length - 1]?.date}</span>
                     </div>
@@ -245,7 +261,7 @@ export default function VendorAnalyticsPage() {
                 <div className="analytics-card bg-white/[0.03] border border-white/10 rounded-[32px] p-8 flex flex-col items-center justify-center relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 blur-[60px] opacity-20" style={{ backgroundColor: primaryColor }} />
 
-                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white/40 mb-6">
+                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white mb-6">
                         <Target className="w-4 h-4" /> Opportunity Score
                     </div>
 
@@ -275,12 +291,12 @@ export default function VendorAnalyticsPage() {
                             </svg>
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
                                 <span className="text-5xl font-black">{aiAdvice?.opportunityScore || 0}</span>
-                                <span className="text-[10px] text-white/40 font-bold">/ 100</span>
+                                <span className="text-[10px] text-white font-bold">/ 100</span>
                             </div>
                         </div>
                     )}
 
-                    <p className="text-center text-xs text-white/40 mt-6 leading-relaxed max-w-[200px]">
+                    <p className="text-center text-xs text-white mt-6 leading-relaxed max-w-[200px]">
                         {aiAdvice?.scoreReasoning || "Analyzing your business performance..."}
                     </p>
                 </div>
@@ -296,7 +312,7 @@ export default function VendorAnalyticsPage() {
                     </div>
                     <div>
                         <h2 className="text-2xl font-black tracking-tight uppercase">AI Action Plan</h2>
-                        <p className="text-xs text-white/40">Gemini-powered recommendations to maximize sales</p>
+                        <p className="text-xs text-white">Gemini-powered recommendations to maximize sales</p>
                     </div>
                 </div>
 
@@ -340,9 +356,9 @@ export default function VendorAnalyticsPage() {
                     <div className="flex items-center justify-between mb-8">
                         <div>
                             <h3 className="text-xl font-black tracking-tight uppercase">Product Performance</h3>
-                            <p className="text-xs text-white/40 mt-1">Revenue & sales by product</p>
+                            <p className="text-xs text-white mt-1">Revenue & sales by product</p>
                         </div>
-                        <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black text-white/40">
+                        <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black text-white">
                             {metrics.products.total} Products
                         </span>
                     </div>
@@ -353,7 +369,7 @@ export default function VendorAnalyticsPage() {
                                 key={product.id}
                                 className="flex items-center gap-4 p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/[0.07] transition-all group"
                             >
-                                <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-xs font-black text-white/40">
+                                <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-xs font-black text-white">
                                     {i + 1}
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -375,22 +391,22 @@ export default function VendorAnalyticsPage() {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-[10px] text-white/40 mt-0.5">{product.category}</p>
+                                    <p className="text-[10px] text-white mt-0.5">{product.category}</p>
                                 </div>
                                 <div className="text-right">
                                     <p className="font-black text-sm">${product.revenue.toLocaleString()}</p>
-                                    <p className="text-[10px] text-white/40">{product.unitsSold} sold</p>
+                                    <p className="text-[10px] text-white">{product.unitsSold} sold</p>
                                 </div>
                                 <div className="text-right min-w-[60px]">
                                     <p className={cn(
                                         "font-bold text-sm",
-                                        product.isLowStock ? "text-red-500" : "text-white/60"
+                                        product.isLowStock ? "text-red-500" : "text-white"
                                     )}>
                                         {product.stock}
                                     </p>
-                                    <p className="text-[10px] text-white/40">in stock</p>
+                                    <p className="text-[10px] text-white">in stock</p>
                                 </div>
-                                <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/40 transition-colors" />
+                                <ChevronRight className="w-4 h-4 text-white group-hover:text-white transition-colors" />
                             </div>
                         ))}
                     </div>
@@ -399,7 +415,7 @@ export default function VendorAnalyticsPage() {
                 {/* Category Breakdown */}
                 <div className="analytics-card bg-white/[0.03] border border-white/10 rounded-[32px] p-8">
                     <div className="flex items-center gap-2 mb-8">
-                        <Layers className="w-5 h-5 text-white/40" />
+                        <Layers className="w-5 h-5 text-white" />
                         <h3 className="text-xl font-black tracking-tight uppercase">Categories</h3>
                     </div>
 
@@ -414,7 +430,7 @@ export default function VendorAnalyticsPage() {
                                 <div key={cat.name} className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <span className="font-bold text-sm">{cat.name}</span>
-                                        <span className="text-xs text-white/40">${cat.revenue.toLocaleString()}</span>
+                                        <span className="text-xs text-white">${cat.revenue.toLocaleString()}</span>
                                     </div>
                                     <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                                         <div
@@ -422,7 +438,7 @@ export default function VendorAnalyticsPage() {
                                             style={{ width: `${percentage}%`, backgroundColor: color }}
                                         />
                                     </div>
-                                    <div className="flex items-center justify-between text-[10px] text-white/40">
+                                    <div className="flex items-center justify-between text-[10px] text-white">
                                         <span>{cat.units} units</span>
                                         <span>{percentage.toFixed(1)}%</span>
                                     </div>
@@ -491,7 +507,7 @@ function MetricCard({ title, value, change, subtext, icon, color }: {
         <div className="analytics-card bg-white/[0.03] border border-white/10 p-6 rounded-[28px] hover:border-white/20 transition-all group">
             <div className="flex items-center justify-between mb-4">
                 <div
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-white/40 group-hover:scale-110 transition-transform"
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-white group-hover:scale-110 transition-transform"
                     style={{ backgroundColor: `${color}15` }}
                 >
                     <div style={{ color }}>{icon}</div>
@@ -506,9 +522,9 @@ function MetricCard({ title, value, change, subtext, icon, color }: {
                     </div>
                 )}
             </div>
-            <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">{title}</p>
+            <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">{title}</p>
             <p className="text-3xl font-black tracking-tight">{value}</p>
-            {subtext && <p className="text-xs text-white/40 mt-1">{subtext}</p>}
+            {subtext && <p className="text-xs text-white mt-1">{subtext}</p>}
         </div>
     );
 }
@@ -532,7 +548,7 @@ function ActionColumn({ title, subtitle, actions, loading, color, icon }: {
                 </div>
                 <div>
                     <h4 className="font-black uppercase text-sm tracking-tight">{title}</h4>
-                    <p className="text-[10px] text-white/40">{subtitle}</p>
+                    <p className="text-[10px] text-white">{subtitle}</p>
                 </div>
             </div>
 
@@ -556,7 +572,7 @@ function ActionColumn({ title, subtitle, actions, loading, color, icon }: {
                                 </div>
                                 <div>
                                     <p className="font-bold text-sm leading-tight">{item.action}</p>
-                                    <p className="text-[10px] text-white/40 mt-1">{item.reason}</p>
+                                    <p className="text-[10px] text-white mt-1">{item.reason}</p>
                                 </div>
                             </div>
                             <div className="mt-3 flex items-center gap-2">
@@ -573,7 +589,7 @@ function ActionColumn({ title, subtitle, actions, loading, color, icon }: {
                         </div>
                     ))
                 ) : (
-                    <p className="text-xs text-white/20 italic p-4">No recommendations yet.</p>
+                    <p className="text-xs text-white italic p-4">No recommendations yet.</p>
                 )}
             </div>
         </div>
@@ -591,7 +607,8 @@ function InsightCard({ title, content, icon }: {
                 {icon}
                 <h4 className="font-black uppercase text-xs tracking-widest">{title}</h4>
             </div>
-            <p className="text-sm text-white/60 leading-relaxed">{content}</p>
+            <p className="text-sm text-white leading-relaxed">{content}</p>
         </div>
     );
 }
+

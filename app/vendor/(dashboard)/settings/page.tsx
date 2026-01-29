@@ -26,7 +26,7 @@ export default function VendorSettingsPage() {
             <header className="flex items-center justify-between">
                 <div>
                     <h1 className="text-5xl font-black tracking-tighter uppercase">SHOP CUSTOMIZER</h1>
-                    <p className="text-white/40 font-medium">Configure your store&apos;s digital presence and branding.</p>
+                    <p className="text-white font-medium">Configure your store&apos;s digital presence and branding.</p>
                 </div>
                 <button className="flex items-center gap-2 px-8 py-4 bg-primary text-black font-black rounded-2xl hover:bg-primary/90 transition-all shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)]">
                     <Save className="w-5 h-5" /> PUBLISH CHANGES
@@ -53,7 +53,7 @@ export default function VendorSettingsPage() {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
-                                    <label className="text-[10px] font-black uppercase text-white/40 mb-2 block tracking-widest">Shop Accent Color</label>
+                                    <label className="text-[10px] font-black uppercase text-white mb-2 block tracking-widest">Shop Accent Color</label>
                                     <div className="flex items-center gap-4 p-4 bg-black/40 border border-white/10 rounded-2xl">
                                         <input
                                             type="color"
@@ -65,7 +65,7 @@ export default function VendorSettingsPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-black uppercase text-white/40 mb-2 block tracking-widest">Storefront Typography</label>
+                                    <label className="text-[10px] font-black uppercase text-white mb-2 block tracking-widest">Storefront Typography</label>
                                     <select className="w-full bg-black/40 border border-white/10 p-4 rounded-2xl text-sm font-bold focus:outline-none">
                                         <option>Geist Ultra Black</option>
                                         <option>Inter Enterprise</option>
@@ -88,7 +88,7 @@ export default function VendorSettingsPage() {
 
                 {/* Live Preview Sidebar */}
                 <aside className="settings-card h-fit sticky top-12">
-                    <h4 className="text-[10px] font-black uppercase text-white/40 tracking-widest mb-4 flex items-center gap-2">
+                    <h4 className="text-[10px] font-black uppercase text-white tracking-widest mb-4 flex items-center gap-2">
                         <Layout className="w-4 h-4" /> Live Storefront Preview
                     </h4>
                     <div className="bg-[#050505] border border-white/10 rounded-[40px] overflow-hidden shadow-2xl">
@@ -109,7 +109,7 @@ export default function VendorSettingsPage() {
                             </div>
                         </div>
                         <div className="p-4 bg-white/5 border-t border-white/5 flex justify-center">
-                            <p className="text-[8px] font-black uppercase text-white/20 tracking-tighter">Powered by Retail Nexus OS</p>
+                            <p className="text-[8px] font-black uppercase text-white tracking-tighter">Powered by Retail Nexus OS</p>
                         </div>
                     </div>
                 </aside>
@@ -127,7 +127,7 @@ function Plus({ className }: { className?: string }) {
 function InputGroup({ label, placeholder }: any) {
     return (
         <div>
-            <label className="text-[10px] font-black uppercase text-white/40 mb-2 block tracking-widest">{label}</label>
+            <label className="text-[10px] font-black uppercase text-white mb-2 block tracking-widest">{label}</label>
             <input
                 type="text"
                 placeholder={placeholder}
@@ -136,3 +136,4 @@ function InputGroup({ label, placeholder }: any) {
         </div>
     )
 }
+

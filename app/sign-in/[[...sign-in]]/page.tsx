@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { SignIn, useUser, useAuth } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Store, User, ArrowRight, Zap, ArrowLeft, ShieldCheck } from "lucide-react";
+import { Store, User, ArrowRight, Zap, ArrowLeft, ShieldCheck, Truck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import Link from "next/link";
 
-type RoleType = "customer" | "vendor" | null;
+type RoleType = "customer" | "vendor" | "logistics" | null;
 
 const roleOptions = [
     {
@@ -28,6 +28,15 @@ const roleOptions = [
         icon: <Store className="w-10 h-10" />,
         color: "#22c55e",
         redirectTo: "/vendor/onboarding",
+    },
+    {
+        id: "logistics" as const,
+        title: "I'm a Courier",
+        subtitle: "Deliver the Nexus",
+        desc: "Access your rider dashboard, manage deliveries, and track your earnings on the go.",
+        icon: <Truck className="w-10 h-10" />,
+        color: "#fbbf24",
+        redirectTo: "/logistics",
     },
 ];
 
@@ -113,7 +122,7 @@ export default function SignInPage() {
             <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center">
                 <div className="text-center space-y-4">
                     <div className="w-16 h-16 border-4 border-white/10 border-t-primary rounded-full animate-spin mx-auto" />
-                    <p className="text-white/40 font-bold uppercase tracking-widest text-xs">Redirecting to your dashboard...</p>
+                    <p className="text-white font-bold uppercase tracking-widest text-xs">Redirecting to your dashboard...</p>
                 </div>
             </div>
         );
@@ -148,7 +157,7 @@ export default function SignInPage() {
                             <div className="w-6 h-6 bg-black rounded-sm rotate-45 group-hover:rotate-90 transition-transform duration-500" />
                         </div>
                         <span className="text-2xl font-black tracking-tighter">
-                            RETAIL <span className="text-white/40 italic">NEXUS</span>
+                            RETAIL <span className="text-white italic">NEXUS</span>
                         </span>
                     </Link>
                 </header>
@@ -161,9 +170,9 @@ export default function SignInPage() {
                                 <Zap className="w-3 h-3 fill-primary" /> Get Started
                             </div>
                             <h1 className="text-5xl lg:text-7xl font-black tracking-tighter uppercase mb-4">
-                                HOW WILL YOU <span className="text-white/20 italic">USE</span> NEXUS?
+                                HOW WILL YOU <span className="text-white italic">USE</span> NEXUS?
                             </h1>
-                            <p className="text-white/40 text-lg font-medium max-w-xl mx-auto">
+                            <p className="text-white text-lg font-medium max-w-xl mx-auto">
                                 Select your primary role to get started with a personalized experience.
                             </p>
                         </div>
@@ -193,9 +202,9 @@ export default function SignInPage() {
 
                                     <h3 className="text-2xl font-black uppercase tracking-tight mb-1">{role.title}</h3>
                                     <p className="text-sm font-bold mb-4" style={{ color: role.color }}>{role.subtitle}</p>
-                                    <p className="text-sm text-white/40 leading-relaxed">{role.desc}</p>
+                                    <p className="text-sm text-white leading-relaxed">{role.desc}</p>
 
-                                    <div className="mt-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/20 group-hover:text-white transition-colors">
+                                    <div className="mt-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white group-hover:text-white transition-colors">
                                         Continue <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                     </div>
                                 </button>
@@ -204,9 +213,9 @@ export default function SignInPage() {
 
                         {/* Admin Hint */}
                         <div className="text-center">
-                            <p className="text-xs text-white/20">
+                            <p className="text-xs text-white">
                                 Are you an administrator?{" "}
-                                <Link href="/admin/dashboard" className="text-white/40 hover:text-white underline underline-offset-4 transition-colors">
+                                <Link href="/admin/dashboard" className="text-white hover:text-white underline underline-offset-4 transition-colors">
                                     Access Admin Portal
                                 </Link>
                             </p>
@@ -220,7 +229,7 @@ export default function SignInPage() {
                         {/* Back Button */}
                         <button
                             onClick={handleBack}
-                            className="flex items-center gap-2 text-white/40 hover:text-white text-sm font-bold transition-colors group"
+                            className="flex items-center gap-2 text-white hover:text-white text-sm font-bold transition-colors group"
                         >
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                             Change Role
@@ -246,7 +255,7 @@ export default function SignInPage() {
                                                     <br />
                                                     <span style={{ color: role.color }}>{role.title === "I'm a Consumer" ? "SHOPPER" : "MERCHANT"}</span>
                                                 </h2>
-                                                <p className="text-white/40 text-lg font-medium leading-relaxed">
+                                                <p className="text-white text-lg font-medium leading-relaxed">
                                                     Sign in or create an account to {role.title === "I'm a Consumer" ? "start shopping and saving" : "manage your business"}.
                                                 </p>
                                             </div>
@@ -254,11 +263,11 @@ export default function SignInPage() {
                                             <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-3">
                                                 <div className="flex items-center gap-3 text-sm">
                                                     <ShieldCheck className="w-5 h-5 text-primary" />
-                                                    <span className="text-white/60">Secure authentication via Clerk</span>
+                                                    <span className="text-white">Secure authentication via Clerk</span>
                                                 </div>
                                                 <div className="flex items-center gap-3 text-sm">
                                                     <Zap className="w-5 h-5 text-primary" />
-                                                    <span className="text-white/60">Instant access to your dashboard</span>
+                                                    <span className="text-white">Instant access to your dashboard</span>
                                                 </div>
                                             </div>
                                         </>
@@ -276,12 +285,12 @@ export default function SignInPage() {
                                                 rootBox: "mx-auto",
                                                 card: "bg-transparent shadow-none border-0",
                                                 headerTitle: "text-white font-black text-2xl",
-                                                headerSubtitle: "text-white/40",
+                                                headerSubtitle: "text-white",
                                                 socialButtonsBlockButton: "bg-white/10 border-white/10 text-white hover:bg-white/20",
                                                 socialButtonsBlockButtonText: "font-bold",
                                                 dividerLine: "bg-white/10",
-                                                dividerText: "text-white/20",
-                                                formFieldLabel: "text-white/60 font-bold",
+                                                dividerText: "text-white",
+                                                formFieldLabel: "text-white font-bold",
                                                 formFieldInput: "bg-white/5 border-white/10 text-white rounded-xl focus:border-primary",
                                                 formButtonPrimary: "bg-primary hover:bg-primary/80 text-black font-black uppercase tracking-widest rounded-xl",
                                                 footerActionLink: "text-primary hover:text-primary/80",
@@ -291,7 +300,7 @@ export default function SignInPage() {
                                         }}
                                         forceRedirectUrl={getRedirectUrl()}
                                         signUpForceRedirectUrl={getRedirectUrl()}
-                                        signUpUrl="/sign-in"
+                                        signUpUrl="/sign-up"
                                     />
                                 </div>
                             </div>

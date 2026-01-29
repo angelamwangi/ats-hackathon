@@ -1,38 +1,37 @@
 import { v } from "convex/values";
-import { action, mutation } from "./_generated/server";
+import { action, mutation, query } from "./_generated/server";
 import { api } from "./_generated/api";
 
 // Helper to generate the Daraja Password
 const getMpesaPassword = (shortCode: string, passkey: string, timestamp: string) => {
-    return Buffer.from(`${shortCode}${passkey}${timestamp}`).toString("base64");
+    return btoa(`${shortCode}${passkey}${timestamp}`);
 };
 
-// Helper to get Timestamp in YYYYMMDDHHmmss format
 const getTimestamp = () => {
-    const now = new Date();
-    const pad = (n: number) => n.toString().padStart(2, "0");
-    return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    const date = new Date();
+    return date.getFullYear() +
+        ("0" + (date.getMonth() + 1)).slice(-2) +
+        ("0" + date.getDate()).slice(-2) +
+        ("0" + date.getHours()).slice(-2) +
+        ("0" + date.getMinutes()).slice(-2) +
+        ("0" + date.getSeconds()).slice(-2);
 };
 
 export const initiateMpesaStkPush = action({
     args: {
-        phoneNumber: v.string(), // Format: 254712345678
+        phoneNumber: v.string(),
         amount: v.number(),
-        orderId: v.optional(v.string()), // Optional internal order ID
+        orderId: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
-        const consumerKey = process.env.MPESA_CONSUMER_KEY;
-        const consumerSecret = process.env.MPESA_CONSUMER_SECRET;
-        const shortCode = process.env.MPESA_SHORTCODE || "174379"; // Sandbox default
-        const passkey = process.env.MPESA_PASSKEY;
-        const callbackUrl = process.env.MPESA_CALLBACK_URL;
-
-        if (!consumerKey || !consumerSecret || !passkey || !callbackUrl) {
-            throw new Error("M-Pesa credentials not configured in environment variables.");
-        }
+        const consumerKey = process.env.MPESA_CONSUMER_KEY!;
+        const consumerSecret = process.env.MPESA_CONSUMER_SECRET!;
+        const shortCode = process.env.MPESA_SHORTCODE!;
+        const passkey = process.env.MPESA_PASSKEY!;
+        const callbackUrl = process.env.MPESA_CALLBACK_URL!;
 
         // 1. Get OAuth Token
-        const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64");
+        const auth = btoa(`${consumerKey}:${consumerSecret}`);
         const tokenResponse = await fetch(
             "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
             {
@@ -93,5 +92,35 @@ export const handleMpesaCallback = mutation({
         } else {
             console.error("M-Pesa Payment Failed:", stkCallback.ResultDesc);
         }
+    },
+});
+
+export const recordPayment = mutation({
+    args: {
+        orderId: v.optional(v.id("orders")),
+        vendorId: v.id("vendors"),
+        amount: v.number(),
+        method: v.union(v.literal("cash"), v.literal("mpesa")),
+        status: v.union(v.literal("completed"), v.literal("failed"), v.literal("pending")),
+        transactionId: v.optional(v.string()),
+        phoneNumber: v.optional(v.string()),
+    },
+    handler: async (ctx, args) => {
+        const paymentId = await ctx.db.insert("payments", {
+            ...args,
+            timestamp: Date.now(),
+        });
+        return paymentId;
+    },
+});
+
+export const getVendorPayments = query({
+    args: { vendorId: v.id("vendors") },
+    handler: async (ctx, args) => {
+        return await ctx.db
+            .query("payments")
+            .withIndex("by_vendor", (q) => q.eq("vendorId", args.vendorId))
+            .order("desc")
+            .collect();
     },
 });

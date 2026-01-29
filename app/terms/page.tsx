@@ -5,7 +5,7 @@ export default function TermsPage() {
         <main className="min-h-screen bg-[#050505] text-white py-32 px-8">
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-5xl font-black uppercase tracking-tighter mb-12">TERMS OF SERVICE</h1>
-                <div className="space-y-8 text-white/60 leading-relaxed">
+                <div className="space-y-8 text-white leading-relaxed">
                     <section>
                         <h2 className="text-xl font-black text-white uppercase mb-4">1. Acceptance of Terms</h2>
                         <p>By accessing Retail Nexus, you agree to be bound by these terms. Our "Save-to-Buy" (BNPL) model is subject to specific local financial regulations.</p>
@@ -23,3 +23,4 @@ export default function TermsPage() {
         </main>
     );
 }
+

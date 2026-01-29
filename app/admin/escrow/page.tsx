@@ -36,7 +36,7 @@ export default function AdminEscrowPage() {
         <div ref={containerRef} className="space-y-12 pb-20">
             <header className="flex flex-col gap-2">
                 <h1 className="text-5xl font-black tracking-tighter uppercase">ESCROW GOVERNANCE</h1>
-                <p className="text-white/40 font-medium">Monitoring BNPL progress jars and platform liquidity.</p>
+                <p className="text-white font-medium">Monitoring BNPL progress jars and platform liquidity.</p>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -117,14 +117,14 @@ function MetricCard({ title, value, sub, icon, isPrimary }: any) {
         )}>
             <div className={cn(
                 "w-10 h-10 rounded-2xl flex items-center justify-center transition-all",
-                isPrimary ? "bg-black/10" : "bg-white/5 text-white/40 group-hover:bg-white group-hover:text-black"
+                isPrimary ? "bg-black/10" : "bg-white/5 text-white group-hover:bg-white group-hover:text-black"
             )}>
                 {icon}
             </div>
             <div className="mt-8">
-                <p className={cn("text-[10px] font-black uppercase tracking-widest mb-1", isPrimary ? "text-black/60" : "text-white/40")}>{title}</p>
+                <p className={cn("text-[10px] font-black uppercase tracking-widest mb-1", isPrimary ? "text-black/60" : "text-white")}>{title}</p>
                 <p className="text-3xl font-black tracking-tighter">{value}</p>
-                <p className={cn("text-[10px] font-bold mt-1", isPrimary ? "text-black/40" : "text-white/20")}>{sub}</p>
+                <p className={cn("text-[10px] font-bold mt-1", isPrimary ? "text-black/40" : "text-white")}>{sub}</p>
             </div>
         </div>
     )
@@ -137,29 +137,30 @@ function SettlementRow({ vendor, amount, items, status, isActive }: any) {
             isActive ? "bg-white/10 border-white/10" : "bg-white/5 border-transparent hover:border-white/5"
         )}>
             <div className="flex items-center gap-6">
-                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white/20">
+                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white">
                     <Wallet className="w-6 h-6" />
                 </div>
                 <div>
                     <p className="font-bold text-lg">{vendor}</p>
-                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">Batch Settlement: {items} Claims</p>
+                    <p className="text-[10px] font-black text-white uppercase tracking-widest">Batch Settlement: {items} Claims</p>
                 </div>
             </div>
             <div className="flex items-center gap-12 text-right">
                 <div className="hidden md:block">
-                    <p className="text-[10px] font-black text-white/40 uppercase mb-1">Settlement Amount</p>
+                    <p className="text-[10px] font-black text-white uppercase mb-1">Settlement Amount</p>
                     <p className="text-lg font-black">{amount}</p>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className={cn(
                         "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest",
-                        isActive ? "bg-primary/20 text-primary" : "bg-white/5 text-white/40"
+                        isActive ? "bg-primary/20 text-primary" : "bg-white/5 text-white"
                     )}>{status}</span>
                     <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all opacity-0 group-hover:opacity-100">
-                        <ArrowRight className="w-4 h-4 text-white/40" />
+                        <ArrowRight className="w-4 h-4 text-white" />
                     </button>
                 </div>
             </div>
         </div>
     );
 }
+

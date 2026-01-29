@@ -50,3 +50,17 @@ export const getUserByClerkId = query({
             .unique();
     },
 });
+
+export const updateLogisticsProfile = mutation({
+    args: {
+        userId: v.id("users"),
+        vehicleType: v.optional(v.string()),
+        plateNumber: v.optional(v.string()),
+        companyName: v.optional(v.string()),
+        isAvailable: v.optional(v.boolean()),
+    },
+    handler: async (ctx, args) => {
+        const { userId, ...updates } = args;
+        await ctx.db.patch(userId, updates);
+    },
+});

@@ -5,7 +5,7 @@ export default function PrivacyPage() {
         <main className="min-h-screen bg-[#050505] text-white py-32 px-8">
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-5xl font-black uppercase tracking-tighter mb-12">PRIVACY POLICY</h1>
-                <div className="space-y-8 text-white/60 leading-relaxed">
+                <div className="space-y-8 text-white leading-relaxed">
                     <p>Your privacy is paramount in the Retail Nexus ecosystem. We use enterprise-grade encryption for all transaction data.</p>
                     <section>
                         <h2 className="text-xl font-black text-white uppercase mb-4">Data Collection</h2>
@@ -20,3 +20,4 @@ export default function PrivacyPage() {
         </main>
     );
 }
+

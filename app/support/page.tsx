@@ -25,7 +25,7 @@ export default function HelpPage() {
             <header className="mb-20 text-center flex flex-col items-center">
                 <h2 className="text-6xl font-black tracking-tighter mb-6 uppercase">HOW CAN WE<br />HELP YOU?</h2>
                 <div className="relative group max-w-2xl w-full">
-                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-white transition-all" />
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white group-focus-within:text-white transition-all" />
                     <input
                         type="text"
                         placeholder="Search tutorials, BNPL rules, or system guides..."
@@ -83,11 +83,11 @@ export default function HelpPage() {
 function CategoryCard({ title, desc, icon }: any) {
     return (
         <div className="help-card bg-white/[0.03] border border-white/10 p-10 rounded-[40px] hover:border-white/20 transition-all group">
-            <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white/40 group-hover:bg-white group-hover:text-black transition-all mb-8">
+            <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all mb-8">
                 {icon}
             </div>
             <h4 className="text-xl font-black uppercase tracking-tight mb-2">{title}</h4>
-            <p className="text-sm font-bold text-white/40 leading-relaxed">{desc}</p>
+            <p className="text-sm font-bold text-white leading-relaxed">{desc}</p>
         </div>
     );
 }
@@ -96,13 +96,14 @@ function ArticleLink({ title, time }: any) {
     return (
         <a href="#" className="flex items-center justify-between p-6 bg-white/[0.02] border border-white/5 rounded-3xl hover:bg-white/5 transition-all group">
             <div className="flex items-center gap-4">
-                <FileText className="w-5 h-5 text-white/20" />
+                <FileText className="w-5 h-5 text-white" />
                 <span className="font-bold text-sm tracking-tight">{title}</span>
             </div>
             <div className="flex items-center gap-4">
-                <span className="text-[10px] font-black uppercase text-white/20">{time}</span>
-                <ArrowRight className="w-4 h-4 text-white/20 group-hover:text-primary transition-all" />
+                <span className="text-[10px] font-black uppercase text-white">{time}</span>
+                <ArrowRight className="w-4 h-4 text-white group-hover:text-primary transition-all" />
             </div>
         </a>
     );
 }
+

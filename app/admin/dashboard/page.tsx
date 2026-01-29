@@ -41,7 +41,7 @@ export default function AdminPage() {
                     <ShieldCheck className="w-3 h-3" /> Platform Secured
                 </div>
                 <h1 className="text-5xl font-black tracking-tighter">PLATFORM PULSE</h1>
-                <p className="text-white/40 font-medium">Real-time governance and global economic metrics.</p>
+                <p className="text-white font-medium">Real-time governance and global economic metrics.</p>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -79,7 +79,7 @@ export default function AdminPage() {
                 <div className="lg:col-span-2 bg-white/[0.03] border border-white/10 rounded-[32px] p-8">
                     <div className="flex items-center justify-between mb-8">
                         <h3 className="text-xl font-black tracking-tight">VENDOR HEALTH INDEX</h3>
-                        <button className="text-xs font-bold text-white/40 hover:text-white transition-colors">VIEW ALL VENDORS</button>
+                        <button className="text-xs font-bold text-white hover:text-white transition-colors">VIEW ALL VENDORS</button>
                     </div>
 
                     <div className="space-y-6">
@@ -93,12 +93,12 @@ export default function AdminPage() {
                 <div className="bg-primary/5 border border-primary/20 rounded-[32px] p-8 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-3xl -mr-16 -mt-16 group-hover:bg-primary/30 transition-all" />
                     <h3 className="text-xl font-black tracking-tight mb-4">AI PRICE INTEL</h3>
-                    <p className="text-sm text-white/60 leading-relaxed mb-8">
+                    <p className="text-sm text-white leading-relaxed mb-8">
                         Market median prices for <span className="text-white font-bold">Category: Electronics</span> have risen by 4.2% in your region.
                     </p>
                     <div className="space-y-4">
                         <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
-                            <p className="text-[10px] font-black text-white/40 uppercase mb-1">Recommended Action</p>
+                            <p className="text-[10px] font-black text-white uppercase mb-1">Recommended Action</p>
                             <p className="text-sm font-bold">Update vendor commission caps in Sector 4</p>
                         </div>
                         <button className="w-full py-3 bg-white text-black font-black rounded-2xl flex items-center justify-center gap-2 group-hover:scale-[0.98] transition-all">
@@ -121,7 +121,7 @@ function StatCard({ title, value, trend, isPositive, icon }: {
     return (
         <div className="stat-card bg-white/[0.03] border border-white/10 p-6 rounded-[32px] hover:border-white/20 transition-all flex flex-col justify-between group">
             <div className="flex items-center justify-between mb-8">
-                <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-white/40 group-hover:scale-110 group-hover:bg-white group-hover:text-black transition-all">
+                <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-white group-hover:text-black transition-all">
                     {icon}
                 </div>
                 <div className={cn(
@@ -133,7 +133,7 @@ function StatCard({ title, value, trend, isPositive, icon }: {
                 </div>
             </div>
             <div>
-                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">{title}</p>
+                <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">{title}</p>
                 <p className="text-3xl font-black tracking-tighter">{value}</p>
             </div>
         </div>
@@ -149,16 +149,16 @@ function VendorRow({ name, sales, health, status }: { name: string; sales: strin
                 </div>
                 <div>
                     <p className="font-bold">{name}</p>
-                    <p className="text-[10px] font-black text-white/40 uppercase">{status}</p>
+                    <p className="text-[10px] font-black text-white uppercase">{status}</p>
                 </div>
             </div>
             <div className="text-right flex items-center gap-8">
                 <div>
-                    <p className="text-[10px] font-black text-white/40 uppercase">Sales</p>
+                    <p className="text-[10px] font-black text-white uppercase">Sales</p>
                     <p className="text-sm font-black">{sales}</p>
                 </div>
                 <div className="w-24">
-                    <p className="text-[10px] font-black text-white/40 uppercase mb-1">Health {health}%</p>
+                    <p className="text-[10px] font-black text-white uppercase mb-1">Health {health}%</p>
                     <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                         <div
                             className={cn(
@@ -173,3 +173,4 @@ function VendorRow({ name, sales, health, status }: { name: string; sales: strin
         </div>
     );
 }
+

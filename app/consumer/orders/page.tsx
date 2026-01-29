@@ -35,14 +35,14 @@ export default function OrderHistoryPage() {
             <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                     <h2 className="text-5xl font-black tracking-tight mb-4 uppercase">ORDER HISTORY</h2>
-                    <p className="text-white/40 max-w-xl text-lg font-medium leading-relaxed">
+                    <p className="text-white max-w-xl text-lg font-medium leading-relaxed">
                         Track your active shipments and review your <span className="text-primary italic">Fulfilled Acquisitions</span>.
                     </p>
                 </div>
                 <div className="flex bg-white/5 border border-white/10 rounded-2xl p-1">
                     <button className="px-6 py-2 bg-white text-black font-black rounded-xl text-xs uppercase tracking-widest transition-all">All Orders</button>
-                    <button className="px-6 py-2 text-white/40 hover:text-white font-black rounded-xl text-xs uppercase tracking-widest transition-all">Active</button>
-                    <button className="px-6 py-2 text-white/40 hover:text-white font-black rounded-xl text-xs uppercase tracking-widest transition-all">Completed</button>
+                    <button className="px-6 py-2 text-white hover:text-white font-black rounded-xl text-xs uppercase tracking-widest transition-all">Active</button>
+                    <button className="px-6 py-2 text-white hover:text-white font-black rounded-xl text-xs uppercase tracking-widest transition-all">Completed</button>
                 </div>
             </header>
 
@@ -92,7 +92,7 @@ export default function OrderHistoryPage() {
                         </div>
                     </div>
                 ) : (
-                    <div className="p-12 border-dashed border border-white/10 rounded-[40px] text-center text-white/40 font-bold uppercase tracking-widest">
+                    <div className="p-12 border-dashed border border-white/10 rounded-[40px] text-center text-white font-bold uppercase tracking-widest">
                         No active orders in progress
                     </div>
                 )}
@@ -100,7 +100,7 @@ export default function OrderHistoryPage() {
                 {/* Completed Orders Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {completedOrders.length === 0 ? (
-                        <div className="col-span-2 p-12 text-center text-white/20 font-bold uppercase tracking-widest">
+                        <div className="col-span-2 p-12 text-center text-white font-bold uppercase tracking-widest">
                             No completed orders yet
                         </div>
                     ) : (
@@ -126,11 +126,11 @@ function CompletedOrderCard({ name, id, _id, date, price, points }: any) {
     return (
         <div className="order-card bg-[#111] border border-white/10 rounded-[32px] p-8 hover:border-white/20 transition-all group">
             <div className="flex justify-between items-start mb-8">
-                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white/40 group-hover:bg-white group-hover:text-black transition-all duration-500">
+                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all duration-500">
                     <ShoppingBag className="w-6 h-6" />
                 </div>
                 <div className="text-right">
-                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">#{id}</p>
+                    <p className="text-[10px] font-black text-white uppercase tracking-widest">#{id}</p>
                     <div className="flex items-center gap-1.5 justify-end text-green-500 mt-1">
                         <CheckCircle2 className="w-3 h-3" />
                         <span className="text-[10px] font-black uppercase">Delivered</span>
@@ -140,16 +140,16 @@ function CompletedOrderCard({ name, id, _id, date, price, points }: any) {
 
             <div className="mb-8">
                 <h4 className="text-xl font-black tracking-tight mb-1 uppercase text-white">{name}</h4>
-                <p className="text-xs font-bold text-white/40 uppercase tracking-widest">{date}</p>
+                <p className="text-xs font-bold text-white uppercase tracking-widest">{date}</p>
             </div>
 
             <div className="flex items-center justify-between pt-6 border-t border-white/5">
                 <div>
-                    <p className="text-[10px] font-black text-white/40 uppercase">Amount</p>
+                    <p className="text-[10px] font-black text-white uppercase">Amount</p>
                     <p className="text-lg font-black text-white">{price}</p>
                 </div>
                 <div className="text-right">
-                    <p className="text-[10px] font-black text-white/40 uppercase">Points Earned</p>
+                    <p className="text-[10px] font-black text-white uppercase">Points Earned</p>
                     <p className="text-lg font-black text-primary">{points}</p>
                 </div>
             </div>
@@ -167,3 +167,4 @@ function CompletedOrderCard({ name, id, _id, date, price, points }: any) {
         </div>
     );
 }
+

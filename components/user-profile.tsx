@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser, SignOutButton, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { LogOut } from "lucide-react";
 
 export function UserProfile() {
     const { user, isLoaded } = useUser();
@@ -11,12 +12,12 @@ export function UserProfile() {
         clerkId: user?.id || ""
     });
 
-    if (!isLoaded) return <div className="w-12 h-12 rounded-full bg-white/5 animate-pulse" />;
+    if (!isLoaded) return <div className="w-full h-14 rounded-2xl bg-zinc-800 animate-pulse" />;
 
     if (!user) {
         return (
             <SignInButton mode="modal">
-                <button className="px-6 py-2.5 bg-white text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-primary transition-all active:scale-95 shadow-xl">
+                <button className="w-full py-4 bg-white text-black font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-zinc-200 transition-all active:scale-95 shadow-xl">
                     Sign In
                 </button>
             </SignInButton>
@@ -26,33 +27,36 @@ export function UserProfile() {
     const role = user.publicMetadata.role as string | undefined;
 
     return (
-        <div className="flex items-center gap-4 p-2 pl-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
-            <div className="flex flex-col items-end">
-                <p className="font-bold text-white text-sm">{user.firstName || "Member"}</p>
+        <div className="flex items-center gap-4 p-3 bg-black rounded-[22px] border border-zinc-800">
+            <div className="flex flex-col items-start flex-1 min-w-0">
+                <p className="font-black text-white text-sm truncate w-full uppercase tracking-tight">{user.firstName || "Member"}</p>
                 {!userData ? (
                     !role ? (
-                        <Link href="/sign-in" className="text-[8px] text-primary hover:text-white uppercase tracking-widest font-black animate-pulse">
-                            Complete Setup
+                        <Link href="/sign-in" className="text-[10px] text-primary hover:text-white uppercase tracking-widest font-black animate-pulse">
+                            Setup Required
                         </Link>
                     ) : (
-                        <p className="text-[8px] text-white/40 uppercase tracking-widest font-black animate-pulse">
-                            SYNCING...
+                        <p className="text-[10px] text-zinc-600 uppercase tracking-widest font-black animate-pulse">
+                            Syncing...
                         </p>
                     )
                 ) : (
-                    <p className="text-[8px] text-white/40 uppercase tracking-widest font-black">
+                    <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-black leading-none mt-1">
                         {userData.role}
                     </p>
                 )}
             </div>
-            <img
-                src={user.imageUrl}
-                alt={user.fullName || "User"}
-                className="w-10 h-10 rounded-xl border border-white/10"
-            />
+            <div className="relative shrink-0">
+                <img
+                    src={user.imageUrl}
+                    alt={user.fullName || "User"}
+                    className="w-10 h-10 rounded-xl border border-zinc-800 shadow-md grayscale-[0.2] hover:grayscale-0 transition-all"
+                />
+                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-black rounded-full" />
+            </div>
             <SignOutButton>
-                <button className="p-2 text-white/40 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+                <button className="p-3 text-zinc-600 hover:text-white hover:bg-zinc-800 rounded-xl transition-all group">
+                    <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 </button>
             </SignOutButton>
         </div>

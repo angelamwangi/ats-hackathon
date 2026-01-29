@@ -36,10 +36,10 @@ export default function ConsumerLayout({ children }: { children: React.ReactNode
                     </div>
 
                     <div className="flex items-center gap-6">
-                        <button className="text-white/40 hover:text-white transition-colors">
+                        <button className="text-white hover:text-white transition-colors">
                             <Search className="w-5 h-5" />
                         </button>
-                        <button className="text-white/40 hover:text-white transition-colors relative">
+                        <button className="text-white hover:text-white transition-colors relative">
                             <ShoppingBag className="w-5 h-5" />
                             <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full border-2 border-black" />
                         </button>
@@ -55,8 +55,8 @@ export default function ConsumerLayout({ children }: { children: React.ReactNode
             {/* Footer */}
             <footer className="border-t border-white/5 py-12 mt-20">
                 <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-8">
-                    <p className="text-white/20 text-sm font-medium">© 2026 RETAIL NEXUS OS. ALL RIGHTS RESERVED.</p>
-                    <div className="flex gap-8 text-white/20 text-sm font-bold tracking-widest uppercase">
+                    <p className="text-white text-sm font-medium">© 2026 RETAIL NEXUS OS. ALL RIGHTS RESERVED.</p>
+                    <div className="flex gap-8 text-white text-sm font-bold tracking-widest uppercase">
                         <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
                         <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
                         <Link href="/support" className="hover:text-white transition-colors">Support</Link>
@@ -73,10 +73,11 @@ function NavLink({ href, children, active }: { href: string; children: React.Rea
             href={href}
             className={cn(
                 "text-sm font-bold tracking-widest uppercase transition-colors",
-                active ? "text-white" : "text-white/40 hover:text-white"
+                active ? "text-white" : "text-white hover:text-white"
             )}
         >
             {children}
         </Link>
     );
 }
+

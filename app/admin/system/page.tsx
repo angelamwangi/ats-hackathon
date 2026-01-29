@@ -39,7 +39,7 @@ export default function AdminSystemPage() {
                     <Activity className="w-3 h-3" /> ALL SYSTEMS OPERATIONAL
                 </div>
                 <h1 className="text-5xl font-black tracking-tighter uppercase">SYSTEM HEALTH</h1>
-                <p className="text-white/40 font-medium">Monitoring Convex-to-SQLite synchronization and API latency.</p>
+                <p className="text-white font-medium">Monitoring Convex-to-SQLite synchronization and API latency.</p>
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -56,7 +56,7 @@ export default function AdminSystemPage() {
 
                     <div className="flex items-center justify-between mb-12">
                         <h3 className="text-xl font-black tracking-tight uppercase">SYNC TRAFFIC (OPS)</h3>
-                        <span className="text-[10px] font-black text-white/40 uppercase tracking-widest italic flex items-center gap-2">
+                        <span className="text-[10px] font-black text-white uppercase tracking-widest italic flex items-center gap-2">
                             <Terminal className="w-3 h-3" /> 124 mutations/min
                         </span>
                     </div>
@@ -76,7 +76,7 @@ export default function AdminSystemPage() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                        <p className="text-xs font-bold text-white/40 uppercase tracking-widest">Global Peak Sync 14:02 PM</p>
+                        <p className="text-xs font-bold text-white uppercase tracking-widest">Global Peak Sync 14:02 PM</p>
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase">
                                 <Zap className="w-3 h-3 fill-primary" /> Low Latency Mode
@@ -117,16 +117,16 @@ function HealthMetric({ title, status, latency, icon, isHealthy }: any) {
     return (
         <div className="system-card p-6 bg-white/[0.03] border border-white/10 rounded-3xl group hover:border-white/20 transition-all">
             <div className="flex items-center justify-between mb-6">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/20 group-hover:bg-white group-hover:text-black transition-all">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all">
                     {icon}
                 </div>
                 {isHealthy && <CheckCircle2 className="w-4 h-4 text-green-500" />}
             </div>
             <div>
-                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">{title}</p>
+                <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">{title}</p>
                 <div className="flex items-baseline justify-between">
                     <p className="text-xl font-black tracking-tight">{status}</p>
-                    <p className="text-[10px] font-bold text-white/20">{latency}</p>
+                    <p className="text-[10px] font-bold text-white">{latency}</p>
                 </div>
             </div>
         </div>
@@ -136,7 +136,7 @@ function HealthMetric({ title, status, latency, icon, isHealthy }: any) {
 function LogLine({ time, msg, type }: any) {
     return (
         <div className="flex gap-3 border-b border-white/5 pb-2">
-            <span className="text-white/20 shrink-0">[{time}]</span>
+            <span className="text-white shrink-0">[{time}]</span>
             <span className={cn(
                 "font-black uppercase tracking-tighter",
                 type === "success" ? "text-green-500" : type === "error" ? "text-red-500" : "text-primary"
@@ -150,3 +150,4 @@ function CheckCircle2({ className }: { className?: string }) {
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
     )
 }
+

@@ -159,6 +159,8 @@ export const registerSupplier = mutation({
         vendorId: v.id("vendors"),
         name: v.string(),
         contactEmail: v.string(),
+        contactPhone: v.string(),
+        category: v.string(),
         leadTimeDays: v.number(),
     },
     handler: async (ctx, args) => {
@@ -166,6 +168,8 @@ export const registerSupplier = mutation({
             vendorId: args.vendorId,
             name: args.name,
             contactEmail: args.contactEmail,
+            contactPhone: args.contactPhone,
+            category: args.category,
             leadTimeDays: args.leadTimeDays,
             reliabilityScore: 100, // Initial perfect score
         });

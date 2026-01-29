@@ -110,9 +110,9 @@ export default function Home() {
               <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_50px_rgba(255,255,255,0.3)] transition-all duration-500">
                 <div className="w-5 h-5 bg-black rounded-sm rotate-45 group-hover:rotate-90 transition-transform duration-500" />
               </div>
-              <span className="hidden md:block">RETAIL <span className="text-white/40 italic">NEXUS</span></span>
+              <span className="hidden md:block">RETAIL <span className="text-white italic">NEXUS</span></span>
             </Link>
-            <div className="hidden lg:flex items-center gap-8 text-[11px] font-black uppercase tracking-widest text-white/30">
+            <div className="hidden lg:flex items-center gap-8 text-[11px] font-black uppercase tracking-widest text-white">
               <Link href="/consumer/marketplace" className="hover:text-white transition-colors">Marketplace</Link>
               <Link href="/sign-in?role=vendor" className="hover:text-white transition-colors">Retail OS</Link>
               <Link href="/admin/dashboard" className="hover:text-white transition-colors">Infrastructure</Link>
@@ -125,7 +125,7 @@ export default function Home() {
                 <UserProfile />
               ) : (
                 <div className="flex items-center gap-4">
-                  <Link href="/sign-in" className="text-[11px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors px-4">Login</Link>
+                  <Link href="/sign-in" className="text-[11px] font-black uppercase tracking-widest text-white hover:text-white transition-colors px-4">Login</Link>
                   <Link href="/sign-in" className="px-8 py-3.5 bg-white! text-black font-black text-[11px] uppercase tracking-widest rounded-2xl hover:bg-primary transition-all active:scale-95 shadow-xl">
                     Start for Free
                   </Link>
@@ -145,11 +145,11 @@ export default function Home() {
 
           <h2 className="hero-title-main text-7xl lg:text-[10rem] font-black tracking-tighter leading-[0.85] mb-10 uppercase">
             OPERATING<br />
-            <span className="text-white/20 italic">SYSTEM</span>
+            <span className="text-white italic">SYSTEM</span>
           </h2>
 
-          <p className="hero-sub-main text-xl lg:text-3xl text-white/40 leading-snug mb-20 max-w-3xl mx-auto font-medium tracking-tight">
-            One platform to run your <span className="text-white/80">physical shop</span>, launch your <span className="text-white/80">online store</span>, and offer flexible <span className="text-primary">"Save-to-Buy"</span> credit.
+          <p className="hero-sub-main text-xl lg:text-3xl text-white leading-snug mb-20 max-w-3xl mx-auto font-medium tracking-tight">
+            One platform to run your <span className="text-white">physical shop</span>, launch your <span className="text-white">online store</span>, and offer flexible <span className="text-primary">"Save-to-Buy"</span> credit.
           </p>
 
           <div className="hero-sub-main flex flex-col md:flex-row items-center justify-center gap-6">
@@ -171,8 +171,8 @@ export default function Home() {
       {/* 2. The Power of Three (Bento Grid) */}
       <section className="max-w-7xl mx-auto px-8 py-32 border-t border-white/5 bento-grid">
         <div className="text-center mb-24">
-          <h3 className="text-[12px] font-black uppercase tracking-[0.5em] text-white/20 mb-4">Core Ecosystem</h3>
-          <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter">THE POWER <span className="text-white/20 italic">OF THREE</span></h2>
+          <h3 className="text-[12px] font-black uppercase tracking-[0.5em] text-white mb-4">Core Ecosystem</h3>
+          <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter">THE POWER <span className="text-white italic">OF THREE</span></h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -180,14 +180,14 @@ export default function Home() {
           <div className="bento-item lg:col-span-12 p-12 rounded-[56px] bg-white/[0.03] border border-white/5 flex flex-col md:flex-row items-center justify-between group overflow-hidden relative">
             <div className="max-w-xl relative z-10">
               <div className="flex gap-2 mb-8">
-                <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10 text-white/40 group-hover:text-white transition-colors">Offline Sales</span>
-                <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10 text-white/40">Barcode Scanning</span>
+                <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10 text-white group-hover:text-white transition-colors">Offline Sales</span>
+                <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10 text-white">Barcode Scanning</span>
               </div>
               <h4 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter mb-6 leading-none">
                 Internet is optional.<br />
                 <span className="text-primary italic">Sales are mandatory.</span>
               </h4>
-              <p className="text-white/40 text-lg font-medium leading-relaxed mb-10">
+              <p className="text-white text-lg font-medium leading-relaxed mb-10">
                 Never lose a customer to a bad connection. Our SQLite-powered POS works 100% offline and syncs the moment you're back.
               </p>
               <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-black transition-all duration-500">
@@ -202,8 +202,8 @@ export default function Home() {
             <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center mb-12 group-hover:bg-blue-500 group-hover:text-white transition-all">
               <Globe className="w-8 h-8" />
             </div>
-            <h4 className="text-4xl font-black uppercase tracking-tighter mb-4">YOUR SHOP,<br /><span className="text-white/20 italic">EVERYWHERE.</span></h4>
-            <p className="text-white/40 text-lg font-medium mb-8">Instantly turn your physical inventory into a global online storefront. discovery your quality.</p>
+            <h4 className="text-4xl font-black uppercase tracking-tighter mb-4">YOUR SHOP,<br /><span className="text-white italic">EVERYWHERE.</span></h4>
+            <p className="text-white text-lg font-medium mb-8">Instantly turn your physical inventory into a global online storefront. discovery your quality.</p>
             <div className="flex flex-wrap gap-2">
               <span className="px-3 py-1 bg-white/5 rounded-full text-[9px] font-extrabold tracking-widest border border-white/5">Unified Inventory</span>
               <span className="px-3 py-1 bg-white/5 rounded-full text-[9px] font-extrabold tracking-widest border border-white/5">Price Intel</span>
@@ -229,7 +229,7 @@ export default function Home() {
           <div className="relative">
             <div className="p-8 rounded-[48px] bg-black border border-white/10 shadow-2xl skew-y-3 lg:skew-y-6">
               <div className="flex items-center justify-between mb-8">
-                <span className="text-[10px] font-bold tracking-widest uppercase text-white/30">Vendor Pulse Dashboard</span>
+                <span className="text-[10px] font-bold tracking-widest uppercase text-white">Vendor Pulse Dashboard</span>
                 <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
               </div>
               <div className="space-y-6">
@@ -253,9 +253,9 @@ export default function Home() {
 
           <div>
             <h3 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter mb-8 leading-none">
-              BUSINESS <span className="text-white/20 italic">PULSE</span><br />SIMPLIFIED
+              BUSINESS <span className="text-white italic">PULSE</span><br />SIMPLIFIED
             </h3>
-            <p className="text-white/40 text-lg font-medium mb-12 leading-relaxed">
+            <p className="text-white text-lg font-medium mb-12 leading-relaxed">
               Watch your inventory status shift in real-time. Use GSAP-powered intelligence to predict outages before they happen.
             </p>
             <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden mb-4">
@@ -271,9 +271,9 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div className="order-2 lg:order-1">
             <h3 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter mb-8 leading-none">
-              THE BEST <span className="text-white/20 italic">DEAL,</span><br />EVERY TIME
+              THE BEST <span className="text-white italic">DEAL,</span><br />EVERY TIME
             </h3>
-            <p className="text-white/40 text-lg font-medium mb-12 max-w-xl">
+            <p className="text-white text-lg font-medium mb-12 max-w-xl">
               Our Comparison Engine scans every vendor in the Nexus to find the optimal balance of price, quality, and proximity.
             </p>
 
@@ -293,9 +293,9 @@ export default function Home() {
                     <span className="font-bold uppercase tracking-tight">{v.name}</span>
                   </div>
                   <div className="flex items-center gap-8">
-                    <span className="text-sm font-black text-white/40">{v.price}</span>
+                    <span className="text-sm font-black text-white">{v.price}</span>
                     <div className="flex items-center gap-2">
-                      <ShieldCheck className={cn("w-4 h-4", v.winner ? "text-primary" : "text-white/20")} />
+                      <ShieldCheck className={cn("w-4 h-4", v.winner ? "text-primary" : "text-white")} />
                       <span className="text-xs font-black">{v.quality}</span>
                     </div>
                   </div>
@@ -317,13 +317,13 @@ export default function Home() {
         <div className="flex flex-col md:flex-row items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
             <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter mb-4 leading-none">
-              VIBRANT <span className="text-white/20 italic">CATALOG</span>
+              VIBRANT <span className="text-white italic">CATALOG</span>
             </h2>
-            <p className="text-white/40 text-lg font-medium leading-relaxed">
+            <p className="text-white text-lg font-medium leading-relaxed">
               Experience the best-performing goods from our global vendor ecosystem.
             </p>
           </div>
-          <Link href="/consumer/marketplace" className="group flex items-center gap-4 text-sm font-black uppercase tracking-widest text-white/40 hover:text-white transition-all">
+          <Link href="/consumer/marketplace" className="group flex items-center gap-4 text-sm font-black uppercase tracking-widest text-white hover:text-white transition-all">
             <span>Explore full platform</span>
             <div className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-primary group-hover:text-black transition-all duration-500">
               <ArrowRight className="w-5 h-5" />
@@ -341,11 +341,11 @@ export default function Home() {
                   <div className="absolute top-4 left-4 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-black text-primary border border-primary/20 uppercase z-10">
                     Value: {product.qualityRating}
                   </div>
-                  <ShoppingCart className="w-12 h-12 text-white/5 group-hover:text-primary/20 transition-colors duration-500" />
+                  <ShoppingCart className="w-12 h-12 text-white group-hover:text-primary/20 transition-colors duration-500" />
                 </div>
                 <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{product.name}</h3>
                 <p className="text-3xl font-black mb-8">${product.price}</p>
-                <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/20 group-hover:text-white transition-colors">
+                <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white group-hover:text-white transition-colors">
                   Analyze Deal <ArrowRight className="w-4 h-4" />
                 </div>
               </Link>
@@ -362,9 +362,9 @@ export default function Home() {
           </div>
           <h2 className="text-5xl lg:text-[7rem] font-black uppercase tracking-tighter mb-8 leading-[0.85]">
             CIRCULAR<br />
-            <span className="text-white/20 italic">ECONOMY</span>
+            <span className="text-white italic">ECONOMY</span>
           </h2>
-          <p className="text-white/40 text-xl lg:text-2xl font-medium mb-12">
+          <p className="text-white text-xl lg:text-2xl font-medium mb-12">
             Don't just sell products; manage their lifecycle. Our platform includes built-in trade-in and recycling modules to keep customers coming back.
           </p>
           <div className="flex justify-center gap-4">
@@ -387,7 +387,7 @@ export default function Home() {
           <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-12 text-left pt-32 border-t border-white/5">
             <div>
               <h5 className="text-[10px] font-black uppercase tracking-widest text-primary mb-8">Product</h5>
-              <ul className="space-y-4 text-sm font-bold text-white/40">
+              <ul className="space-y-4 text-sm font-bold text-white">
                 <li><Link href="/sign-in?role=vendor" className="hover:text-white transition-colors">Offline POS</Link></li>
                 <li><Link href="/consumer/marketplace" className="hover:text-white transition-colors">Marketplace</Link></li>
                 <li><Link href="/consumer/bnpl" className="hover:text-white transition-colors">Save-to-Buy</Link></li>
@@ -395,16 +395,16 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h5 className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-8">Resources</h5>
-              <ul className="space-y-4 text-sm font-bold text-white/40">
+              <h5 className="text-[10px] font-black uppercase tracking-widest text-white mb-8">Resources</h5>
+              <ul className="space-y-4 text-sm font-bold text-white">
                 <li><Link href="/support" className="hover:text-white transition-colors">Documentation</Link></li>
                 <li><Link href="/support" className="hover:text-white transition-colors">SME Toolkit</Link></li>
                 <li><Link href="/support" className="hover:text-white transition-colors">API Reference</Link></li>
               </ul>
             </div>
             <div>
-              <h5 className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-8">Company</h5>
-              <ul className="space-y-4 text-sm font-bold text-white/40">
+              <h5 className="text-[10px] font-black uppercase tracking-widest text-white mb-8">Company</h5>
+              <ul className="space-y-4 text-sm font-bold text-white">
                 <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
                 <li><Link href="/sustainability" className="hover:text-white transition-colors">Sustainability</Link></li>
                 <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
@@ -414,7 +414,7 @@ export default function Home() {
               <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-8">
                 <div className="w-6 h-6 bg-black rounded-sm rotate-45" />
               </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/10">© 2026 RETAIL NEXUS</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white">© 2026 RETAIL NEXUS</p>
             </div>
           </div>
         </div>
@@ -432,7 +432,8 @@ function FeatureCard({ icon, title, desc }: any) {
       <h3 className="text-2xl font-black uppercase tracking-tight mb-4 flex items-center gap-3">
         {title}
       </h3>
-      <p className="text-sm font-medium text-white/40 leading-relaxed">{desc}</p>
+      <p className="text-sm font-medium text-white leading-relaxed">{desc}</p>
     </div>
   );
 }
+

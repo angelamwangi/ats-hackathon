@@ -6,10 +6,16 @@ export default defineSchema({
     clerkId: v.string(),
     name: v.string(),
     email: v.string(),
-    role: v.union(v.literal("admin"), v.literal("vendor"), v.literal("customer")),
+    role: v.union(v.literal("admin"), v.literal("vendor"), v.literal("customer"), v.literal("logistics")),
     walletBalance: v.number(),
     nexusPoints: v.optional(v.number()),
-  }).index("by_clerkId", ["clerkId"]),
+    isAvailable: v.optional(v.boolean()), // For riders
+    currentLocation: v.optional(v.object({ lat: v.number(), lng: v.number() })), // For riders
+    vehicleType: v.optional(v.string()), // e.g. "Bike", "Van"
+    plateNumber: v.optional(v.string()),
+    companyName: v.optional(v.string()),
+    phone: v.optional(v.string()),
+  }).index("by_clerkId", ["clerkId"]).index("by_role", ["role"]),
 
   vendors: defineTable({
     ownerId: v.id("users"),
@@ -52,10 +58,36 @@ export default defineSchema({
     source: v.union(v.literal("pos"), v.literal("ecommerce")),
     status: v.string(), // "pending", "completed", "dispatched"
     offlineId: v.optional(v.string()),
-  }).index("by_vendor", ["vendorId"]),
+    supplierId: v.optional(v.id("suppliers")),
+  }).index("by_vendor", ["vendorId"]).index("by_supplier", ["supplierId"]),
+
+  payments: defineTable({
+    orderId: v.optional(v.id("orders")),
+    vendorId: v.id("vendors"),
+    amount: v.number(),
+    method: v.union(v.literal("cash"), v.literal("mpesa")),
+    status: v.union(v.literal("completed"), v.literal("failed"), v.literal("pending")),
+    transactionId: v.optional(v.string()), // M-Pesa Receipt Number
+    phoneNumber: v.optional(v.string()),
+    timestamp: v.number(),
+  }).index("by_vendor", ["vendorId"]).index("by_order", ["orderId"]).index("by_transactionId", ["transactionId"]),
+
+  deliveries: defineTable({
+    orderId: v.id("orders"),
+    vendorId: v.id("vendors"),
+    riderId: v.optional(v.id("users")),
+    supplierId: v.optional(v.id("suppliers")),
+    status: v.union(v.literal("pending"), v.literal("assigned"), v.literal("picked_up"), v.literal("in_transit"), v.literal("delivered"), v.literal("cancelled")),
+    pickupLocation: v.object({ lat: v.number(), lng: v.number(), address: v.string() }),
+    dropoffLocation: v.object({ lat: v.number(), lng: v.number(), address: v.string() }),
+    estimatedDuration: v.optional(v.number()), // minutes
+    routeCoordinates: v.optional(v.array(v.object({ lat: v.number(), lng: v.number() }))), // For drawing path
+    cost: v.number(),
+  }).index("by_vendor", ["vendorId"]).index("by_rider", ["riderId"]).index("by_status", ["status"]).index("by_order", ["orderId"]).index("by_supplier", ["supplierId"]),
 
   bnplOrders: defineTable({
     userId: v.id("users"),
+    vendorId: v.optional(v.id("vendors")),
     productId: v.id("products"),
     totalPrice: v.number(),
     amountPaid: v.number(),
@@ -65,7 +97,7 @@ export default defineSchema({
     installmentAmount: v.number(),
     startDate: v.number(),
     nextPaymentDate: v.number(),
-  }).index("by_user", ["userId"]),
+  }).index("by_user", ["userId"]).index("by_vendor_status", ["vendorId", "status"]),
 
   loyaltyCards: defineTable({
     vendorId: v.id("vendors"),
@@ -77,16 +109,19 @@ export default defineSchema({
   productVisits: defineTable({
     userId: v.id("users"),
     productId: v.id("products"),
+    vendorId: v.optional(v.id("vendors")),
     timestamp: v.number(),
-  }).index("by_user", ["userId"]),
+  }).index("by_user", ["userId"]).index("by_vendor", ["vendorId"]),
 
   suppliers: defineTable({
     vendorId: v.id("vendors"),
     name: v.string(),
     contactEmail: v.string(),
     contactPhone: v.optional(v.string()),
+    category: v.string(),
     leadTimeDays: v.number(),
     reliabilityScore: v.number(),
+    location: v.optional(v.object({ lat: v.number(), lng: v.number(), address: v.string() })),
   }).index("by_vendor", ["vendorId"]),
 
   purchaseOrders: defineTable({

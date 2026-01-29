@@ -7,6 +7,7 @@ export interface LocalProduct {
     stock: number;
     category: string;
     vendorId: string;
+    images?: string[];
 }
 
 export interface LocalOrder {
@@ -19,6 +20,7 @@ export interface LocalOrder {
     }[];
     totalAmount: number;
     status: 'pending' | 'synced';
+    paymentMethod?: "cash" | "mpesa";
     createdAt: number;
 }
 

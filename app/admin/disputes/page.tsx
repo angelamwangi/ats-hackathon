@@ -36,7 +36,7 @@ export default function AdminDisputesPage() {
         <div ref={containerRef} className="space-y-12 pb-20">
             <header className="flex flex-col gap-2">
                 <h1 className="text-5xl font-black tracking-tighter uppercase">DISPUTE CENTER</h1>
-                <p className="text-white/40 font-medium">Mediate conflicts between vendors and consumers regarding product quality or BNPL terms.</p>
+                <p className="text-white font-medium">Mediate conflicts between vendors and consumers regarding product quality or BNPL terms.</p>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -110,7 +110,7 @@ function StatusCard({ title, value, type, icon }: any) {
     return (
         <div className="dispute-card bg-white/[0.03] border border-white/10 p-8 rounded-[32px] group hover:border-white/20 transition-all">
             <div className="flex items-center justify-between mb-8">
-                <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-white/40 group-hover:bg-white group-hover:text-black transition-all">
+                <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all">
                     {icon}
                 </div>
                 {type && (
@@ -123,7 +123,7 @@ function StatusCard({ title, value, type, icon }: any) {
                 )}
             </div>
             <div>
-                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">{title}</p>
+                <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">{title}</p>
                 <p className="text-3xl font-black tracking-tighter">{value}</p>
             </div>
         </div>
@@ -135,12 +135,12 @@ function DisputeItem({ name, vendor, user, status, isNew }: any) {
         <div className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-white/5 border border-white/5 rounded-3xl hover:bg-white/[0.07] transition-all group/item">
             <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center relative">
-                    <MessageSquare className="w-5 h-5 text-white/20" />
+                    <MessageSquare className="w-5 h-5 text-white" />
                     {isNew && <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full ring-4 ring-[#0a0a0a]" />}
                 </div>
                 <div>
                     <h4 className="font-bold text-sm tracking-tight">{name}</h4>
-                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">{user} vs {vendor}</p>
+                    <p className="text-[10px] font-black text-white uppercase tracking-widest">{user} vs {vendor}</p>
                 </div>
             </div>
             <div className="flex items-center gap-8 mt-4 md:mt-0 text-right">
@@ -153,3 +153,4 @@ function DisputeItem({ name, vendor, user, status, isNew }: any) {
         </div>
     );
 }
+
