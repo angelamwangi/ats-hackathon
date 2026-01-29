@@ -34,6 +34,7 @@ export default defineSchema({
     })),
     isApproved: v.boolean(),
     onboardingStatus: v.optional(v.union(v.literal("pending"), v.literal("completed"))),
+    status: v.optional(v.union(v.literal("active"), v.literal("inactive"), v.literal("suspended"))),
     loyaltyConfig: v.object({ pointsPerDollar: v.number() }),
   }).index("by_ownerId", ["ownerId"]),
 
