@@ -12,6 +12,7 @@ import type * as bnpl from "../bnpl.js";
 import type * as bnpl_payments from "../bnpl_payments.js";
 import type * as branding from "../branding.js";
 import type * as cart from "../cart.js";
+import type * as checkout from "../checkout.js";
 import type * as consumerAnalytics from "../consumerAnalytics.js";
 import type * as crons from "../crons.js";
 import type * as debug from "../debug.js";
@@ -46,6 +47,7 @@ declare const fullApi: ApiFromModules<{
   bnpl_payments: typeof bnpl_payments;
   branding: typeof branding;
   cart: typeof cart;
+  checkout: typeof checkout;
   consumerAnalytics: typeof consumerAnalytics;
   crons: typeof crons;
   debug: typeof debug;

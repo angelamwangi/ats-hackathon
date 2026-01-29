@@ -40,6 +40,8 @@ export default function MarketplacePage() {
     const [category, setCategory] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+    const [checkoutPhoneNumber, setCheckoutPhoneNumber] = useState("");
 
     const wishlist = useQuery(api.wishlist.getWishlist, currentUser ? { userId: currentUser._id } : "skip") || [];
     const toggleWishlist = useMutation(api.wishlist.toggleWishlist);
@@ -52,39 +54,32 @@ export default function MarketplacePage() {
             .map((p: any) => p.productId)
     );
 
-    const initiateMpesa = useAction(api.payments.initiateMpesaStkPush);
     const [isPaying, setIsPaying] = useState(false);
 
     const totalPoints = loyaltyCards?.reduce((acc: number, card: any) => acc + card.points, 0) || 0;
     const cartCount = cartItems.reduce((acc: number, item: any) => acc + item.quantity, 0);
-    const totalAmount = cartItems.reduce((acc: number, item: any) => acc + (item.product.price * item.quantity), 0);
+    const totalAmount = cartItems.reduce((acc: number, item: any) => acc + ((item.product?.price || 0) * item.quantity), 0);
 
-    const checkout = useMutation(api.orders.checkout);
+    const processCheckout = useMutation(api.checkout.processMpesaCheckout);
 
-    const handleCheckout = async () => {
-        if (cartItems.length === 0) return;
-        if (!currentUser) return;
-
-        const phone = prompt("Enter your M-Pesa number (e.g. 254712345678):");
-        if (!phone) return;
+    const handleFinalCheckout = async () => {
+        if (!currentUser || !checkoutPhoneNumber) return;
 
         setIsPaying(true);
         try {
-            const res = await initiateMpesa({ phoneNumber: phone, amount: totalAmount });
-            if (res.ResponseCode === "0") {
-                await checkout({
-                    userId: currentUser._id,
-                    paymentMethod: "mpesa",
-                    phoneNumber: phone
-                });
-                alert("STK Push sent to your phone! Order placed successfully.");
-                setIsCartOpen(false);
-            } else {
-                alert("Failed to initiate payment. Please try again.");
-            }
+            // New mutation: Processes M-Pesa payment (mock) AND creates order in one go
+            await processCheckout({
+                userId: currentUser._id,
+                phoneNumber: checkoutPhoneNumber
+            });
+
+            alert("Payment connection successful! Order dispatched.");
+            setIsCheckoutModalOpen(false);
+            setIsCartOpen(false);
+            setCheckoutPhoneNumber("");
         } catch (error) {
             console.error(error);
-            alert("An error occurred during payment.");
+            alert("Payment failed or timed out.");
         } finally {
             setIsPaying(false);
         }
@@ -276,20 +271,76 @@ export default function MarketplacePage() {
                                 <p className="text-4xl font-black">KSh {Math.floor(totalAmount).toLocaleString()}</p>
                             </div>
                             <button
-                                onClick={handleCheckout}
-                                disabled={cartItems.length === 0 || isPaying}
+                                onClick={() => setIsCheckoutModalOpen(true)}
+                                disabled={cartItems.length === 0}
                                 className="w-full py-6 bg-primary text-black font-black uppercase tracking-widest rounded-2xl hover:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                            >
+                                <ShieldCheck className="w-5 h-5" /> Proceed to Checkout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* M-Pesa Checkout Modal */}
+            {isCheckoutModalOpen && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => { if (!isPaying) setIsCheckoutModalOpen(false); }} />
+                    <div className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-[32px] p-8 shadow-2xl overflow-hidden">
+                        <div className="text-center mb-8">
+                            <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-500/20">
+                                <ShieldCheck className="w-8 h-8 text-green-500" />
+                            </div>
+                            <h3 className="text-2xl font-black uppercase tracking-tight mb-2">Secure Payment</h3>
+                            <p className="text-sm text-gray-400">Enter your M-Pesa details to authorize transaction.</p>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-xs font-black uppercase text-white mb-2 ml-2">M-Pesa Number</label>
+                                <input
+                                    type="text"
+                                    placeholder="2547XXXXXXXX"
+                                    value={checkoutPhoneNumber}
+                                    onChange={(e) => setCheckoutPhoneNumber(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-lg font-bold focus:outline-none focus:border-green-500/50 transition-all text-center tracking-wider"
+                                />
+                            </div>
+
+                            <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                <div className="flex justify-between items-center mb-1">
+                                    <span className="text-xs font-bold text-gray-400 uppercase">Amount to Start</span>
+                                    <span className="font-black">KSh {Math.floor(totalAmount).toLocaleString()}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-xs font-bold text-gray-400 uppercase">Transaction Fee</span>
+                                    <span className="font-black text-green-500">Waived</span>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleFinalCheckout}
+                                disabled={isPaying || !checkoutPhoneNumber}
+                                className="w-full py-5 bg-green-500 text-black font-black uppercase tracking-widest rounded-2xl hover:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale"
                             >
                                 {isPaying ? (
                                     <>
                                         <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                                        AWAITING PIN...
+                                        Processing...
                                     </>
                                 ) : (
                                     <>
-                                        <ShieldCheck className="w-5 h-5" /> Proceed to M-Pesa Checkout
+                                        PAY NOW
                                     </>
                                 )}
+                            </button>
+
+                            <button
+                                onClick={() => setIsCheckoutModalOpen(false)}
+                                disabled={isPaying}
+                                className="w-full py-3 text-xs font-bold text-gray-500 uppercase hover:text-white transition-colors"
+                            >
+                                Cancel Transaction
                             </button>
                         </div>
                     </div>

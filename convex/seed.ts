@@ -4,29 +4,17 @@ import { v } from "convex/values";
 export const seed = mutation({
     args: {},
     handler: async (ctx) => {
-        // 0. Create a dummy user for the vendor owner
-        const userId = await ctx.db.insert("users", {
-            clerkId: "demo_user",
-            name: "Nexus Admin",
-            email: "admin@retailnexus.io",
-            role: "admin",
-            walletBalance: 1000,
-        });
+        // Hardcoded vendor ID as requested
+        const vendorId = "js7frw38nkv63y8snzkd77v6k98029ct" as any;
 
-        // 1. Create a dummy vendor
-        const vendorId = await ctx.db.insert("vendors", {
-            shopName: "Nexus Flagship Store",
-            isApproved: true,
-            loyaltyConfig: { pointsPerDollar: 10 },
-            ownerId: userId
-        });
+        console.log(`Seeding products for Vendor ID: ${vendorId}`);
 
         // 2. Add sample products with appropriate images
         const sampleProducts = [
             // Electronics
             {
                 name: "Wireless Noise-Cancelling Headphones",
-                price: 249,
+                price: 24999,
                 stock: 35,
                 minStockThreshold: 5,
                 category: "Electronics",
@@ -41,7 +29,7 @@ export const seed = mutation({
             },
             {
                 name: "MacBook Pro 14-inch",
-                price: 1899,
+                price: 249999,
                 stock: 12,
                 minStockThreshold: 3,
                 category: "Electronics",
@@ -56,7 +44,7 @@ export const seed = mutation({
             },
             {
                 name: "Smart Watch Series 8",
-                price: 399,
+                price: 45000,
                 stock: 28,
                 minStockThreshold: 5,
                 category: "Electronics",
@@ -71,7 +59,7 @@ export const seed = mutation({
             },
             {
                 name: "4K Ultra HD Smart TV 55\"",
-                price: 649,
+                price: 65000,
                 stock: 18,
                 minStockThreshold: 3,
                 category: "Electronics",
@@ -87,7 +75,7 @@ export const seed = mutation({
             // Fashion
             {
                 name: "Premium Leather Jacket",
-                price: 189,
+                price: 18500,
                 stock: 25,
                 minStockThreshold: 5,
                 category: "Fashion",
@@ -102,7 +90,7 @@ export const seed = mutation({
             },
             {
                 name: "Running Sneakers Pro",
-                price: 129,
+                price: 12500,
                 stock: 42,
                 minStockThreshold: 8,
                 category: "Fashion",
@@ -117,7 +105,7 @@ export const seed = mutation({
             },
             {
                 name: "Designer Sunglasses",
-                price: 159,
+                price: 15500,
                 stock: 30,
                 minStockThreshold: 6,
                 category: "Fashion",
@@ -132,7 +120,7 @@ export const seed = mutation({
             },
             {
                 name: "Classic Denim Jeans",
-                price: 79,
+                price: 7500,
                 stock: 60,
                 minStockThreshold: 12,
                 category: "Fashion",
@@ -148,7 +136,7 @@ export const seed = mutation({
             // Home
             {
                 name: "Ergonomic Office Chair",
-                price: 299,
+                price: 28500,
                 stock: 22,
                 minStockThreshold: 4,
                 category: "Home",
@@ -163,7 +151,7 @@ export const seed = mutation({
             },
             {
                 name: "Ceramic Coffee Maker",
-                price: 89,
+                price: 8500,
                 stock: 38,
                 minStockThreshold: 8,
                 category: "Home",
@@ -178,7 +166,7 @@ export const seed = mutation({
             },
             {
                 name: "Bamboo Desk Organizer",
-                price: 45,
+                price: 4500,
                 stock: 55,
                 minStockThreshold: 10,
                 category: "Home",
@@ -193,7 +181,7 @@ export const seed = mutation({
             },
             {
                 name: "LED Desk Lamp",
-                price: 59,
+                price: 5500,
                 stock: 48,
                 minStockThreshold: 10,
                 category: "Home",
@@ -209,7 +197,7 @@ export const seed = mutation({
             // Groceries
             {
                 name: "Organic Arabica Coffee Beans 1kg",
-                price: 24,
+                price: 2400,
                 stock: 120,
                 minStockThreshold: 20,
                 category: "Groceries",
@@ -224,7 +212,7 @@ export const seed = mutation({
             },
             {
                 name: "Extra Virgin Olive Oil 500ml",
-                price: 18,
+                price: 1800,
                 stock: 85,
                 minStockThreshold: 15,
                 category: "Groceries",
@@ -239,7 +227,7 @@ export const seed = mutation({
             },
             {
                 name: "Organic Honey 500g",
-                price: 15,
+                price: 1500,
                 stock: 95,
                 minStockThreshold: 18,
                 category: "Groceries",
@@ -258,6 +246,6 @@ export const seed = mutation({
             await ctx.db.insert("products", product);
         }
 
-        return "Seeded 15 products with high-quality images and 1 vendor!";
+        return "Seeded 15 products for the specified vendor with KSh prices!";
     }
 });
