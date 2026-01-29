@@ -36,3 +36,29 @@ export const updateVendorBranding = mutation({
         });
     },
 });
+
+export const createVendor = mutation({
+    args: {
+        ownerId: v.id("users"),
+        shopName: v.string(),
+        description: v.optional(v.string()),
+        logoUrl: v.optional(v.string()),
+        brandConfig: v.object({
+            primaryColor: v.string(),
+            secondaryColor: v.string(),
+        }),
+    },
+    handler: async (ctx, args) => {
+        const vendorId = await ctx.db.insert("vendors", {
+            ownerId: args.ownerId,
+            shopName: args.shopName,
+            description: args.description,
+            logoUrl: args.logoUrl,
+            brandConfig: args.brandConfig,
+            onboardingStatus: "completed",
+            joinedDate: Date.now(),
+            status: "active",
+        });
+        return vendorId;
+    },
+});

@@ -16,59 +16,40 @@ export default function VendorOnboarding() {
 
     const currentUser = useQuery(api.users.getUserByClerkId, user ? { clerkId: user.id } : "skip");
     const vendor = useQuery(api.vendors.getVendorByOwnerId, currentUser ? { ownerId: currentUser._id } : "skip");
+    const createVendor = useMutation(api.vendors.createVendor);
     const updateBranding = useMutation(api.vendors.updateVendorBranding);
-    const debugInfo = useQuery(api.debug.getUserDebugInfo, user ? { clerkId: user.id } : "skip");
-    const cleanup = useMutation(api.debug.cleanupDuplicateUsers);
-
-    const [shopName, setShopName] = useState("");
-    const [keywords, setKeywords] = useState("");
-    const [description, setDescription] = useState("");
-    const [logoUrl, setLogoUrl] = useState("");
-    const [primaryColor, setPrimaryColor] = useState("#22c55e"); // Default Emerald
-    const [secondaryColor, setSecondaryColor] = useState("#000000");
-    const [saving, setSaving] = useState(false);
-    const [generating, setGenerating] = useState(false);
-
-    const generateDescription = useAction(api.branding.generateBrandDescription);
-
-    useEffect(() => {
-        if (vendor) {
-            // Guard: If already onboarded, force redirect to Dashboard
-            if (vendor.onboardingStatus === "completed") {
-                const checkRoleAndRedirect = async () => {
-                    if (user?.publicMetadata?.role !== "vendor") {
-                        await syncVendorRole(user!.id);
-                        await user?.reload();
-                    }
-                    router.replace("/vendor/dashboard");
-                };
-                checkRoleAndRedirect();
-                return;
-            }
-
-            setShopName(vendor.shopName);
-            setDescription(vendor.description || "");
-            setLogoUrl(vendor.logoUrl || "");
-            if (vendor.brandConfig) {
-                setPrimaryColor(vendor.brandConfig.primaryColor);
-                setSecondaryColor(vendor.brandConfig.secondaryColor);
-            }
-        }
-    }, [vendor, router]);
 
     const handleSave = async () => {
-        if (!vendor) return;
+        // Validation
+        if (!shopName) return;
+
         setSaving(true);
         try {
-            await updateBranding({
-                vendorId: vendor._id,
-                description,
-                logoUrl,
-                brandConfig: {
-                    primaryColor,
-                    secondaryColor,
-                }
-            });
+            if (vendor) {
+                // Update existing
+                await updateBranding({
+                    vendorId: vendor._id,
+                    description,
+                    logoUrl,
+                    brandConfig: {
+                        primaryColor,
+                        secondaryColor,
+                    }
+                });
+            } else {
+                // Create new
+                if (!currentUser) return;
+                await createVendor({
+                    ownerId: currentUser._id,
+                    shopName,
+                    description,
+                    logoUrl,
+                    brandConfig: {
+                        primaryColor,
+                        secondaryColor,
+                    }
+                });
+            }
 
             // Ensure role matches
             if (user?.publicMetadata?.role !== "vendor") {
@@ -79,7 +60,7 @@ export default function VendorOnboarding() {
             await user?.reload();
             router.push("/vendor/dashboard");
         } catch (error) {
-            console.error("Failed to update branding:", error);
+            console.error("Failed to save vendor:", error);
         } finally {
             setSaving(false);
         }
