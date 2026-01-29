@@ -56,7 +56,6 @@ export const createVendor = mutation({
             logoUrl: args.logoUrl,
             brandConfig: args.brandConfig,
             onboardingStatus: "completed",
-            joinedDate: Date.now(),
             status: "active",
         });
         return vendorId;
