@@ -4,7 +4,6 @@ import { useUser } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useEffect, useState } from "react";
-import { RoleSelector } from "@/components/role-selector";
 import { usePathname } from "next/navigation";
 import posthog from "posthog-js";
 
