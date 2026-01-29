@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
+import { useNexusDialog } from "@/components/providers/NexusDialogProvider";
 
 export default function InventoryPage() {
     const { user } = useUser();
@@ -116,7 +117,7 @@ export default function InventoryPage() {
                                         <div key={alert._id} className="p-5 bg-orange-500 text-black border border-orange-400 rounded-2xl flex items-center justify-between shadow-lg">
                                             <div>
                                                 <p className="font-black text-xs uppercase tracking-tight">{alert.batchId}</p>
-                                                <p className="text-[10px] font-black uppercase opacity-60">{alert.daysUntilExpiry} days left</p>
+                                                <p className="text-[10px] font-black uppercase text-zinc-800">{alert.daysUntilExpiry} days left</p>
                                             </div>
                                             <ShieldAlert className="w-5 h-5" />
                                         </div>
@@ -125,7 +126,7 @@ export default function InventoryPage() {
                             </div>
                         </div>
 
-                        <div className="p-8 bg-zinc-900 border-2 border-primary/20 rounded-[40px] shadow-xl">
+                        <div className="p-8 bg-zinc-900 border-2 border-zinc-800 rounded-[40px] shadow-xl">
                             <Zap className="w-8 h-8 text-primary mb-6" />
                             <h4 className="font-black text-xs text-primary uppercase tracking-widest mb-3">Demand Forecast</h4>
                             <p className="text-sm text-zinc-300 leading-relaxed font-bold uppercase tracking-tight">
@@ -152,8 +153,8 @@ export default function InventoryPage() {
                 </div>
 
                 {isAdding && (
-                    <div className="fixed inset-0 bg-black backdrop-blur-md flex items-center justify-center z-[100] p-4">
-                        <form onSubmit={handleSubmit} className="bg-zinc-950 border-2 border-zinc-800 p-12 rounded-[56px] max-w-xl w-full relative shadow-[0_0_100px_rgba(34,197,94,0.1)]">
+                    <div className="fixed inset-0 bg-black flex items-center justify-center z-[100] p-4">
+                        <form onSubmit={handleSubmit} className="bg-zinc-950 border-2 border-zinc-800 p-12 rounded-[56px] max-w-xl w-full relative shadow-2xl">
                             <button type="button" onClick={() => setIsAdding(false)} className="absolute top-10 right-10 text-zinc-500 hover:text-white transition-all hover:scale-110">
                                 <Plus className="w-8 h-8 rotate-45" />
                             </button>
@@ -172,7 +173,7 @@ export default function InventoryPage() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-8">
                                     <div>
-                                        <label className="text-[10px] font-black uppercase text-zinc-500 mb-3 block tracking-widest ml-1">Acquisition Price ($)</label>
+                                        <label className="text-[10px] font-black uppercase text-zinc-500 mb-3 block tracking-widest ml-1">Acquisition Price (KSh)</label>
                                         <input
                                             required
                                             type="number"
@@ -226,7 +227,7 @@ export default function InventoryPage() {
                                                     <button
                                                         type="button"
                                                         onClick={() => setSelectedFiles(files => files.filter((_, idx) => idx !== i))}
-                                                        className="absolute top-2 right-2 bg-black border border-white/10 p-1.5 rounded-full text-white hover:bg-red-500 transition-all opacity-0 group-hover:opacity-100"
+                                                        className="absolute top-2 right-2 bg-black border border-zinc-700 p-1.5 rounded-full text-white hover:bg-red-500 transition-all opacity-0 group-hover:opacity-100"
                                                     >
                                                         <X className="w-3 h-3" />
                                                     </button>
@@ -240,7 +241,7 @@ export default function InventoryPage() {
                                 <button
                                     type="submit"
                                     disabled={uploading}
-                                    className="w-full py-6 bg-zinc-800 border-2 border-zinc-700 text-white font-black uppercase tracking-widest rounded-3xl hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+                                    className="w-full py-6 bg-zinc-800 border-2 border-zinc-700 text-white font-black uppercase tracking-widest rounded-3xl hover:bg-white hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-2xl"
                                 >
                                     {uploading ? (
                                         <>
@@ -269,6 +270,7 @@ function ProductPulseCard({ product }: { product: any }) {
     const suppliers = useQuery(api.supplyChain.getSuppliers, { vendorId: product.vendorId });
     const createPO = useMutation(api.supplyChain.generatePurchaseOrder);
     const sendPO = useAction(api.supplyChain.confirmAndSendPO);
+    const { alert, prompt } = useNexusDialog();
 
     const activePOs = useQuery(api.supplyChain.getActivePOsByVendor, { vendorId: product.vendorId }) || [];
     const incomingQty = activePOs
@@ -296,11 +298,15 @@ function ProductPulseCard({ product }: { product: any }) {
 
     const handleReorder = async () => {
         if (!suppliers || suppliers.length === 0) {
-            alert("No suppliers registered for this vendor. Please register a supplier first.");
+            await alert("Missing Supplier", "No suppliers registered for this vendor. Please register a supplier first.");
             return;
         }
 
-        const qty = prompt(`How many units of ${product.name} to reorder?`, "10");
+        const qty = await prompt(
+            "Quick Reorder",
+            `How many units of ${product.name} to reorder?`,
+            "10"
+        );
         if (!qty) return;
 
         try {
@@ -310,15 +316,15 @@ function ProductPulseCard({ product }: { product: any }) {
                 items: [{ productId: product._id, quantity: parseInt(qty), expectedPrice: product.price * 0.8 }]
             });
             await sendPO({ poId });
-            alert("Purchase Order generated and sent to supplier!");
+            await alert("Order Sent", "Purchase Order generated and sent to supplier!");
         } catch (err) {
             console.error(err);
-            alert("Failed to initiate reorder.");
+            await alert("Reorder Failed", "Failed to initiate reorder.");
         }
     };
 
     return (
-        <div className="group bg-zinc-900 border border-zinc-700 p-10 rounded-[48px] hover:border-primary/30 transition-all flex flex-col shadow-2xl relative overflow-hidden">
+        <div className="group bg-zinc-900 border border-zinc-700 p-10 rounded-[48px] hover:border-zinc-500 transition-all flex flex-col shadow-2xl relative overflow-hidden">
             <div className="flex justify-between items-start mb-8 relative z-10">
                 <div>
                     <span className="text-[10px] font-black uppercase text-zinc-500 tracking-widest bg-zinc-800 px-3 py-1 rounded-full border border-zinc-700 mb-2 inline-block">
@@ -337,7 +343,7 @@ function ProductPulseCard({ product }: { product: any }) {
             <div className="relative h-4 bg-black border border-zinc-800 rounded-full overflow-hidden mb-10 shadow-inner">
                 {/* Safety Stock Line */}
                 <div
-                    className="absolute top-0 bottom-0 border-l-2 border-white/40 z-20 pointer-events-none"
+                    className="absolute top-0 bottom-0 border-l-2 border-zinc-600 z-20 pointer-events-none"
                     style={{ left: `${(product.minStockThreshold / 50) * 100}%` }}
                 />
 
@@ -351,7 +357,7 @@ function ProductPulseCard({ product }: { product: any }) {
                 {incomingQty > 0 && (
                     <div
                         ref={ghostRef}
-                        className="absolute top-0 h-full bg-zinc-700 border-l border-white/50"
+                        className="absolute top-0 h-full bg-zinc-700 border-l border-zinc-500"
                         style={{ left: `${(product.stock / 50) * 100}%` }}
                     />
                 )}

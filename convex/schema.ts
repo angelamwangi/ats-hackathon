@@ -22,9 +22,15 @@ export default defineSchema({
     shopName: v.string(),
     description: v.optional(v.string()),
     logoUrl: v.optional(v.string()),
+    bannerUrl: v.optional(v.string()), // Added for settings page
     brandConfig: v.optional(v.object({
       primaryColor: v.string(),
       secondaryColor: v.string(),
+      typography: v.optional(v.string()), // Added for settings page
+    })),
+    contactInfo: v.optional(v.object({ // Added for settings page
+      supportEmail: v.optional(v.string()),
+      whatsappNumber: v.optional(v.string()),
     })),
     isApproved: v.boolean(),
     onboardingStatus: v.optional(v.union(v.literal("pending"), v.literal("completed"))),
@@ -55,11 +61,12 @@ export default defineSchema({
       priceAtSale: v.number()
     })),
     totalAmount: v.number(),
-    source: v.union(v.literal("pos"), v.literal("ecommerce")),
+    source: v.union(v.literal("pos"), v.literal("ecommerce"), v.literal("bnpl")),
     status: v.string(), // "pending", "completed", "dispatched"
     offlineId: v.optional(v.string()),
+    mpesaCheckoutId: v.optional(v.string()),
     supplierId: v.optional(v.id("suppliers")),
-  }).index("by_vendor", ["vendorId"]).index("by_supplier", ["supplierId"]),
+  }).index("by_vendor", ["vendorId"]).index("by_supplier", ["supplierId"]).index("by_checkoutId", ["mpesaCheckoutId"]),
 
   payments: defineTable({
     orderId: v.optional(v.id("orders")),
@@ -98,6 +105,15 @@ export default defineSchema({
     startDate: v.number(),
     nextPaymentDate: v.number(),
   }).index("by_user", ["userId"]).index("by_vendor_status", ["vendorId", "status"]),
+
+  bnplCheckouts: defineTable({
+    planId: v.id("bnplOrders"),
+    checkoutId: v.string(),
+    amount: v.number(),
+    status: v.union(v.literal("pending"), v.literal("completed"), v.literal("failed")),
+    mpesaReceiptNumber: v.optional(v.string()),
+    timestamp: v.number(),
+  }).index("by_plan", ["planId"]).index("by_checkoutId", ["checkoutId"]),
 
   loyaltyCards: defineTable({
     vendorId: v.id("vendors"),

@@ -14,8 +14,11 @@ export const createOrder = mutation({
         source: v.union(v.literal("pos"), v.literal("ecommerce")),
         offlineId: v.optional(v.string()),
         paymentMethod: v.optional(v.union(v.literal("cash"), v.literal("mpesa"))),
+        mpesaCheckoutId: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
+        const isMpesa = args.paymentMethod === "mpesa";
+
         // 1. Check stock for each item
         for (const item of args.items) {
             const product = await ctx.db.get(item.productId);
@@ -24,10 +27,12 @@ export const createOrder = mutation({
             }
         }
 
-        // 2. Decrement stock
-        for (const item of args.items) {
-            const product = (await ctx.db.get(item.productId))!;
-            await ctx.db.patch(item.productId, { stock: product.stock - item.quantity });
+        // 2. Decrement stock ONLY for non-mpesa (verified later for mpesa)
+        if (!isMpesa) {
+            for (const item of args.items) {
+                const product = (await ctx.db.get(item.productId))!;
+                await ctx.db.patch(item.productId, { stock: product.stock - item.quantity });
+            }
         }
 
         // 3. Create order
@@ -38,23 +43,25 @@ export const createOrder = mutation({
             totalAmount: args.totalAmount,
             source: args.source,
             offlineId: args.offlineId,
-            status: "completed",
+            mpesaCheckoutId: args.mpesaCheckoutId,
+            status: isMpesa ? "pending" : "completed",
         });
 
-        // 3b. Record Payment
+        // 3b. Record Payment (Draft for M-Pesa, Completed for Cash)
         if (args.paymentMethod) {
             await ctx.db.insert("payments", {
                 orderId: orderId,
                 vendorId: args.vendorId,
                 amount: args.totalAmount,
                 method: args.paymentMethod,
-                status: "completed",
+                status: isMpesa ? "pending" : "completed",
+                transactionId: args.mpesaCheckoutId,
                 timestamp: Date.now(),
             });
         }
 
-        // 4. Update Nexus Points
-        if (args.customerId) {
+        // 4. Update Nexus Points (ONLY for completed orders)
+        if (args.customerId && !isMpesa) {
             const user = await ctx.db.get(args.customerId);
             if (user) {
                 const pointsEarned = Math.floor(args.totalAmount / 10);

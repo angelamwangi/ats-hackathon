@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "@/convex/_generated/api";
 
 export async function POST(req: NextRequest) {
     try {
@@ -73,45 +75,34 @@ export async function POST(req: NextRequest) {
                 console.error("Error calling Convex:", error);
             }
 
-            // Send SMS Notifications using Africa's Talking
+            // Send SMS Notifications using Africa's Talking via Convex
             try {
-                const AT_USERNAME = process.env.AT_USERNAME || "sandbox";
-                const AT_API_KEY = process.env.AT_API_KEY;
-
-                if (AT_API_KEY) {
-                    const africastalking = require('africastalking')({
-                        apiKey: AT_API_KEY,
-                        username: AT_USERNAME
-                    });
-                    const sms = africastalking.SMS;
+                const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+                if (convexUrl) {
+                    const httpClient = new ConvexHttpClient(convexUrl);
 
                     // Send to Buyer
                     const buyerMessage = `Payment Received! confirmed. ${mpesaReceiptNumber} Confirmed. Ksh${amount} paid to Retail Nexus. Date: ${transactionDate}. Thank you!`;
-                    await sms.send({
+                    await httpClient.action(api.notifications.sendSMS, {
                         to: [phoneNumber],
-                        message: buyerMessage,
-                        from: process.env.AT_SENDER_ID
+                        message: buyerMessage
                     });
-                    console.log("✅ SMS sent to buyer:", phoneNumber);
+                    console.log("✅ SMS action triggered for buyer:", phoneNumber);
 
-                    // Send to Vendor (Using a fixed number for now or extracting from somewhere if possible)
-                    // Since we don't have the vendor ID link here easily without DB lookup, 
-                    // we'll skip or send to a designated notification number if configured
                     const adminPhone = process.env.ADMIN_PHONE_NUMBER;
                     if (adminPhone) {
                         const vendorMessage = `New Payment: ${mpesaReceiptNumber} Received Ksh${amount} from ${phoneNumber}.`;
-                        await sms.send({
+                        await httpClient.action(api.notifications.sendSMS, {
                             to: [adminPhone],
-                            message: vendorMessage,
-                            from: process.env.AT_SENDER_ID
+                            message: vendorMessage
                         });
-                        console.log("✅ SMS sent to vendor/admin:", adminPhone);
+                        console.log("✅ SMS action triggered for vendor/admin:", adminPhone);
                     }
                 } else {
-                    console.log("⚠️ Africa's Talking API Key not found, skipping SMS.");
+                    console.log("⚠️ Convex URL not found, skipping SMS action.");
                 }
             } catch (smsError) {
-                console.error("❌ Error sending SMS:", smsError);
+                console.error("❌ Error triggering SMS action:", smsError);
             }
 
             return NextResponse.json({

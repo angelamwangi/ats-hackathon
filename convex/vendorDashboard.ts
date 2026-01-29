@@ -14,6 +14,7 @@ export const getDashboardMetrics = query({
         const oneDayAgo = now - 24 * 60 * 60 * 1000;
         const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
         const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+        const startOfDay = new Date().setHours(0, 0, 0, 0);
 
         // Fetch all orders for this vendor
         const allOrders = await ctx.db
@@ -162,6 +163,14 @@ export const getDashboardMetrics = query({
             views: {
                 total: allVisits.length,
                 conversionRate: allVisits.length > 0 ? Number(((orderCount / allVisits.length) * 100).toFixed(1)) : 0
+            },
+            pulse: {
+                activeBnplCount: (await ctx.db
+                    .query("bnplOrders")
+                    .withIndex("by_vendor_status", (q) => q.eq("vendorId", args.vendorId).eq("status", "active"))
+                    .collect()).length,
+                todaysTraffic: allVisits.filter(v => v.timestamp > startOfDay).length,
+                todaysSales: todayRevenue,
             }
         };
     },
@@ -179,62 +188,75 @@ export const getComprehensiveAIAdvice = action({
             vendorId: args.vendorId,
         });
 
+        // Fetch Market Intelligence
+        const marketIntel = await ctx.runQuery(api.market_intel.getVendorMarketOverview, {
+            vendorId: args.vendorId,
+        });
+
         try {
             const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!);
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
             const prompt = `
-You are a world-class Retail Business Intelligence Analyst. Analyze the following comprehensive sales data and provide strategic, actionable advice to help this vendor maximize their sales and profits.
+You are a Senior Retail Market Diagnostic Engine. Your goal is to perform a deep technical audit of the following vendor data and provide real-time strategic course-correction recommendations.
 
-## VENDOR DATA
+## VENDOR DIAGNOSTIC DATA
 
-### Revenue Metrics
-- Today: $${metrics.revenue.today}
-- This Week: $${metrics.revenue.week} (${metrics.revenue.weekChange >= 0 ? '+' : ''}${metrics.revenue.weekChange}% vs last week)
-- This Month: $${metrics.revenue.month}
-- All Time: $${metrics.revenue.total}
+### Financial & Operational Pulse
+- Daily Revenue: $${metrics.revenue.today}
+- Weekly Momentum: $${metrics.revenue.week} (${metrics.revenue.weekChange}% Delta)
+- Cumulative Volume: $${metrics.revenue.total}
+- Average Transaction Value: $${metrics.orders.avgValue}
+- Active BNPL Utilization: ${metrics.pulse.activeBnplCount} concurrent deferred payments
 
-### Order Metrics
-- Total Orders: ${metrics.orders.total}
-- Average Order Value: $${metrics.orders.avgValue}
+### Traffic & Conversion
+- Unique Entities: ${metrics.customers.unique}
+- Real-time Traffic Pulse: ${metrics.pulse.todaysTraffic} sessions today
+- Conversion Delta: ${metrics.views.conversionRate}% (Sessions to Realized Sales)
 
-### Customer Metrics
-- Unique Customers: ${metrics.customers.unique}
-
-### Product Performance (Top 10)
+### SKU Performance Matrix (Top 10)
 ${JSON.stringify(metrics.products.topProducts, null, 2)}
 
-### Category Breakdown
+### Sector Distribution
 ${JSON.stringify(metrics.categories, null, 2)}
 
-### Low Stock Alerts
-${metrics.products.lowStock.length > 0 ? JSON.stringify(metrics.products.lowStock.map((p: any) => p.name)) : 'None'}
+### Market Intelligence (Price Variance Analysis)
+${JSON.stringify(marketIntel.map((m: any) => ({ product: m.productId, variance: m.marketSummary.priceDifferencePercentage, floorPrice: m.marketSummary.lowestCompetitorPrice })), null, 2)}
 
-## REQUIRED OUTPUT
+### Dependency Alerts (Low Stock)
+${metrics.products.lowStock.length > 0 ? JSON.stringify(metrics.products.lowStock.map((p: any) => p.name)) : 'Nominal stock levels detected'}
 
-Provide your analysis as a valid JSON object with the following structure:
+## DIAGNOSTIC REQUIREMENTS
+
+Perform a recursive analysis of the above datasets. Look for:
+1. **Price Elasticity Issues**: Are we over-indexed on pricing compared to market floors?
+2. **Inventory Risk**: High-velocity products with low liquidity or depleting stock.
+3. **Growth Levers**: High conversion categories where we are currently under-utilizing marketing or inventory.
+4. **Retention Signals**: BNPL usage vs repeat purchase behavior.
+
+OUTPUT JSON STRUCTURE:
 {
-    "opportunityScore": <number 1-100>,
-    "scoreReasoning": "<brief explanation of the score>",
+    "opportunityScore": <int 1-100, representing overall market health>,
+    "scoreReasoning": "<technical diagnostic summary>",
     "immediateActions": [
-        { "action": "<specific action>", "impact": "high|medium|low", "reason": "<why this matters>" }
+        { "action": "<technical action>", "impact": "high|medium|low", "reason": "<data-driven rationale>" }
     ],
     "thisWeek": [
-        { "action": "<specific action>", "impact": "high|medium|low", "reason": "<why this matters>" }
+        { "action": "<strategic move>", "impact": "high|medium|low", "reason": "<predictive rationale>" }
     ],
     "thisMonth": [
-        { "action": "<specific action>", "impact": "high|medium|low", "reason": "<why this matters>" }
+        { "action": "<macro pivot>", "impact": "high|medium|low", "reason": "<trend-based rationale>" }
     ],
     "insights": {
-        "hotProducts": "<analysis of best performers>",
-        "coldProducts": "<analysis of underperformers and what to do>",
-        "categoryOpportunity": "<which category to focus on and why>",
-        "pricingAdvice": "<any pricing optimizations>",
-        "inventoryAdvice": "<stock management recommendations>"
+        "hotProducts": "<velocity analysis>",
+        "coldProducts": "<liquidity risk analysis>",
+        "categoryOpportunity": "<sector growth delta>",
+        "pricingAdvice": "<elasticity & margin recommendations>",
+        "inventoryAdvice": "<supply chain & stock floor optimization>"
     }
 }
 
-Be specific, actionable, and data-driven. Focus on quick wins and high-impact strategies.
+Be technical, precise, and aggressive in your growth suggestions.
 `;
 
             const result = await model.generateContent(prompt);

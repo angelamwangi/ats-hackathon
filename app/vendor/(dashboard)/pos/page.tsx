@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
+import { useNexusDialog } from "@/components/providers/NexusDialogProvider";
 
 export default function POSPage() {
     const { user } = useUser();
@@ -33,6 +34,7 @@ export default function POSPage() {
     const [category, setCategory] = useState("All");
     const [cartVisible, setCartVisible] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const { alert, confirm } = useNexusDialog();
 
     // Prevent hydration mismatch
     useEffect(() => {
@@ -56,7 +58,7 @@ export default function POSPage() {
         // FIFO/Batch Intelligence Alert
         const soonExpiring = batches.find((b: any) => b.productId === product._id && b.daysUntilExpiry < 7);
         if (soonExpiring) {
-            alert(`FIFO ALERT: Sell items from Batch ${soonExpiring.batchId} first. They expire in ${soonExpiring.daysUntilExpiry} days.`);
+            alert("FIFO ALERT", `Sell items from Batch ${soonExpiring.batchId} first. They expire in ${soonExpiring.daysUntilExpiry} days.`);
         }
 
         setCart(prev => {
@@ -89,6 +91,7 @@ export default function POSPage() {
     };
 
     const initiateMpesa = useAction(api.payments.initiateMpesaStkPush);
+    const createOrder = useMutation(api.orders.createOrder);
     const [paymentMethod, setPaymentMethod] = useState<"cash" | "mpesa">("cash");
     const [customerPhone, setCustomerPhone] = useState("");
     const [isPaying, setIsPaying] = useState(false);
@@ -100,7 +103,7 @@ export default function POSPage() {
 
         if (paymentMethod === "mpesa" && isOnline) {
             if (!customerPhone || customerPhone.length < 10) {
-                alert("Please enter a valid M-Pesa phone number (e.g., 254712345678)");
+                await alert("Missing Information", "Please enter a valid M-Pesa phone number.");
                 return;
             }
 
@@ -108,22 +111,44 @@ export default function POSPage() {
             try {
                 const res = await initiateMpesa({ phoneNumber: customerPhone, amount: total });
                 if (res.ResponseCode === "0") {
-                    alert("STK Push sent! Customer should enter PIN on their phone...");
+                    await alert("STK Push Sent", "Please check your phone to authorize the transaction.");
+
+                    // Create pending order in Convex immediately if online
+                    if (vendor) {
+                        await createOrder({
+                            vendorId: vendor._id as any,
+                            items: cart.map(c => ({
+                                productId: c.product._id as any,
+                                quantity: c.quantity,
+                                priceAtSale: c.product.price
+                            })),
+                            totalAmount: total,
+                            source: "pos",
+                            paymentMethod: "mpesa",
+                            mpesaCheckoutId: res.CheckoutRequestID
+                        });
+                    }
+
+                    // Clear cart and reset state
+                    setCart([]);
+                    setCustomerPhone("");
+                    setIsPaying(false);
+                    return;
                 } else {
-                    alert("STK Push failed. Please try again or use cash.");
+                    await alert("Payment Failed", "STK Push could not be initiated. Please try again or use cash.");
                     setIsPaying(false);
                     return;
                 }
             } catch (err) {
                 console.error(err);
-                alert("Payment initiation error.");
+                await alert("Error", "Critical error during payment initiation.");
                 setIsPaying(false);
                 return;
             }
         }
 
         if (!vendor) {
-            alert("Vendor information not loaded. Please refresh and try again.");
+            await alert("System Error", "Vendor information not loaded. Please refresh.");
             setIsPaying(false);
             return;
         }
@@ -156,7 +181,10 @@ export default function POSPage() {
         setCart([]);
         setCustomerPhone("");
         setIsPaying(false);
-        alert(isOnline ? "Sale completed & synced!" : "Offline sale saved. Will sync when back online.");
+        await alert(
+            isOnline ? "Sale Synchronized" : "Offline Sale Saved",
+            isOnline ? "The transaction has been published to the cloud." : "Sale recorded locally. It will sync automatically when back online."
+        );
     };
 
     const filteredProducts = products.filter(p =>
@@ -222,7 +250,7 @@ export default function POSPage() {
                 </header>
 
                 {/* Categories */}
-                <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-none flex-shrink-0">
+                <div className="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar flex-shrink-0">
                     {categories.map(cat => (
                         <button
                             key={cat}
@@ -240,7 +268,7 @@ export default function POSPage() {
                 </div>
 
                 {/* Products Grid - Full Height */}
-                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto pr-2 no-scrollbar">
                     {filteredProducts.length === 0 ? (
                         <div className="h-full flex flex-col items-center justify-center text-zinc-700">
                             <Package className="w-24 h-24 mb-6" />
@@ -255,7 +283,7 @@ export default function POSPage() {
                                     disabled={product.stock <= 0}
                                     className="group relative flex flex-col p-5 bg-zinc-900 border-2 border-zinc-800 rounded-[32px] hover:border-primary hover:bg-zinc-800 transition-all text-left disabled:opacity-40 disabled:cursor-not-allowed h-full shadow-xl"
                                 >
-                                    <div className="relative aspect-square w-full mb-4 bg-black/40 rounded-2xl overflow-hidden border border-zinc-800">
+                                    <div className="relative aspect-square w-full mb-4 bg-black rounded-2xl overflow-hidden border border-zinc-800">
                                         {product.images && product.images[0] ? (
                                             <img
                                                 src={product.images[0]}
@@ -268,7 +296,7 @@ export default function POSPage() {
                                             </div>
                                         )}
                                         {product.stock <= 0 && (
-                                            <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-black flex items-center justify-center">
                                                 <span className="font-black text-white text-xs uppercase tracking-widest border-2 border-white px-2 py-1">Out of Stock</span>
                                             </div>
                                         )}
@@ -281,7 +309,7 @@ export default function POSPage() {
                                             {product.name}
                                         </h3>
                                         <div className="flex items-baseline gap-2 mb-4">
-                                            <span className="text-3xl font-black text-primary">${product.price}</span>
+                                            <span className="text-3xl font-black text-primary">KSh {Math.floor(product.price)}</span>
                                         </div>
                                     </div>
 
@@ -312,12 +340,12 @@ export default function POSPage() {
                 <>
                     {/* Backdrop */}
                     <div
-                        className="fixed inset-0 bg-black/80 backdrop-blur-md z-40 animate-in fade-in duration-300"
+                        className="fixed inset-0 bg-black z-40"
                         onClick={() => setCartVisible(false)}
                     />
 
                     {/* Cart Sheet */}
-                    <div className="fixed right-0 top-0 bottom-0 w-[480px] bg-zinc-950 border-l-2 border-zinc-800 flex flex-col p-8 z-50 animate-in slide-in-from-right duration-400 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+                    <div className="fixed right-0 top-0 bottom-0 w-[480px] bg-zinc-950 border-l-2 border-zinc-800 flex flex-col p-8 z-50 animate-in slide-in-from-right duration-400 shadow-2xl">
                         <div className="flex items-center justify-between mb-10 flex-shrink-0">
                             <h2 className="text-3xl font-black flex items-center gap-4 uppercase tracking-tighter text-white">
                                 <ShoppingCart className="w-8 h-8 text-primary" /> SHOPPING CART
@@ -335,16 +363,16 @@ export default function POSPage() {
                             </div>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-6">
+                        <div className="flex-1 overflow-y-auto pr-2 no-scrollbar space-y-6">
                             {cart.length === 0 ? (
-                                <div className="h-full flex flex-col items-center justify-center text-zinc-700 text-center">
-                                    <ShoppingCart className="w-24 h-24 mb-6 opacity-20" />
+                                <div className="h-full flex flex-col items-center justify-center text-zinc-900 text-center">
+                                    <ShoppingCart className="w-24 h-24 mb-6" />
                                     <p className="font-black text-2xl uppercase tracking-widest">Cart is empty</p>
                                     <p className="text-sm text-zinc-500 mt-2 font-medium">Add items to get started</p>
                                 </div>
                             ) : (
                                 cart.map(item => (
-                                    <div key={item.product._id} className="p-6 bg-zinc-900 rounded-[32px] border border-zinc-700 flex gap-6 hover:border-primary/30 transition-all items-start shadow-xl">
+                                    <div key={item.product._id} className="p-6 bg-zinc-900 rounded-[32px] border border-zinc-700 flex gap-6 hover:border-zinc-500 transition-all items-start shadow-xl">
                                         <div className="w-24 h-24 rounded-2xl border border-zinc-800 bg-black overflow-hidden flex-shrink-0">
                                             {item.product.images && item.product.images[0] ? (
                                                 <img src={item.product.images[0]} alt={item.product.name} className="object-cover w-full h-full" />
@@ -359,12 +387,12 @@ export default function POSPage() {
                                                 <div className="flex-1">
                                                     <h4 className="font-black text-lg text-white mb-1 uppercase tracking-tight">{item.product.name}</h4>
                                                     <p className="text-xs text-zinc-400 font-bold uppercase tracking-wider">
-                                                        ${item.product.price} / unit
+                                                        KSh {Math.floor(item.product.price)} / unit
                                                     </p>
                                                 </div>
                                                 <button
                                                     onClick={() => removeFromCart(item.product._id)}
-                                                    className="p-3 bg-zinc-800 border border-zinc-700 text-white hover:text-red-500 hover:border-red-500/30 rounded-2xl transition-all"
+                                                    className="p-3 bg-zinc-800 border border-zinc-700 text-white hover:text-red-500 hover:border-red-900 rounded-2xl transition-all"
                                                 >
                                                     <Trash2 className="w-5 h-5" />
                                                 </button>
@@ -387,7 +415,7 @@ export default function POSPage() {
                                                     </button>
                                                 </div>
                                                 <span className="font-black text-2xl text-primary drop-shadow-[0_0_10px_rgba(34,197,94,0.3)]">
-                                                    ${(item.product.price * item.quantity).toFixed(2)}
+                                                    KSh {Math.floor(item.product.price * item.quantity).toLocaleString()}
                                                 </span>
                                             </div>
                                         </div>
@@ -415,7 +443,7 @@ export default function POSPage() {
                                         className={cn(
                                             "px-5 py-2.5 rounded-xl text-xs font-black uppercase transition-all flex items-center gap-2",
                                             paymentMethod === "mpesa" ? "bg-primary text-black shadow-lg" : "text-zinc-500 hover:text-white",
-                                            !isOnline && "opacity-20 grayscale pointer-events-none"
+                                            !isOnline && "text-zinc-800 grayscale pointer-events-none"
                                         )}
                                     >
                                         M-Pesa
@@ -425,7 +453,7 @@ export default function POSPage() {
 
                             {/* M-Pesa Phone Input */}
                             {paymentMethod === "mpesa" && (
-                                <div className="mb-8 p-6 bg-zinc-800/50 border border-zinc-700 rounded-3xl animate-in slide-in-from-top duration-300">
+                                <div className="mb-8 p-6 bg-zinc-800 border border-zinc-700 rounded-3xl animate-in slide-in-from-top duration-300">
                                     <label className="block text-zinc-400 font-black tracking-widest text-[10px] uppercase mb-3">
                                         Customer M-Pesa Number
                                     </label>
@@ -445,7 +473,7 @@ export default function POSPage() {
 
                             <div className="flex justify-between items-center mb-8 px-2">
                                 <span className="text-zinc-400 font-black tracking-widest text-sm uppercase">Total Payable</span>
-                                <span className="text-5xl font-black text-primary tracking-tighter shadow-primary/20 shadow-2xl">${total.toFixed(2)}</span>
+                                <span className="text-5xl font-black text-primary tracking-tighter">KSh {Math.floor(total).toLocaleString()}</span>
                             </div>
 
                             <button
@@ -455,7 +483,7 @@ export default function POSPage() {
                                     "w-full py-6 font-black text-xl uppercase tracking-widest rounded-3xl active:scale-[0.97] transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-4 border shadow-2xl",
                                     paymentMethod === "mpesa"
                                         ? "text-white bg-zinc-800 border-zinc-700 hover:bg-zinc-700"
-                                        : "text-white bg-zinc-800 border-zinc-700 hover:bg-primary hover:text-black hover:border-primary"
+                                        : "text-white bg-zinc-800 border-zinc-700 hover:bg-primary hover:text-black hover:border-primary disabled:bg-zinc-900 disabled:text-zinc-700 disabled:border-zinc-800"
                                 )}
                             >
                                 {isPaying ? (

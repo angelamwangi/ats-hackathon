@@ -390,7 +390,7 @@ export default function ProductDetailPage() {
                                             href={match.sourceUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="px-6 py-3 bg-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest group-hover:bg-white group-hover:text-black transition-all"
+                                            className="px-6 py-3 bg-white text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-primary hover:text-black transition-all"
                                         >
                                             Verify
                                         </a>

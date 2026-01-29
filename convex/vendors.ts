@@ -14,13 +14,19 @@ export const getVendorByOwnerId = query({
 export const updateVendorBranding = mutation({
     args: {
         vendorId: v.id("vendors"),
-        shopName: v.optional(v.string()), // Added shopName update capability
+        shopName: v.optional(v.string()),
         description: v.optional(v.string()),
         logoUrl: v.optional(v.string()),
+        bannerUrl: v.optional(v.string()),
         brandConfig: v.object({
             primaryColor: v.string(),
             secondaryColor: v.string(),
+            typography: v.optional(v.string()),
         }),
+        contactInfo: v.optional(v.object({
+            supportEmail: v.optional(v.string()),
+            whatsappNumber: v.optional(v.string()),
+        })),
     },
     handler: async (ctx, args) => {
         const { vendorId, ...updates } = args;

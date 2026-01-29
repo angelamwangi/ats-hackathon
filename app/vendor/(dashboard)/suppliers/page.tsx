@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
+import { useNexusDialog } from "@/components/providers/NexusDialogProvider";
 
 export default function SupplierPage() {
     const containerRef = useRef(null);
@@ -25,6 +26,7 @@ export default function SupplierPage() {
         contactEmail: "",
         leadTimeDays: 3
     });
+    const { alert } = useNexusDialog();
 
     useEffect(() => {
         if (containerRef.current && suppliers.length > 0) {
@@ -57,7 +59,7 @@ export default function SupplierPage() {
             setFormData({ name: "", category: "", contactPhone: "", contactEmail: "", leadTimeDays: 3 });
         } catch (error) {
             console.error("Failed to add supplier:", error);
-            alert("Failed to register supplier. Please try again.");
+            await alert("Registration Error", "Failed to register supplier partner. Please verify details and try again.");
         } finally {
             setIsSubmitting(false);
         }
@@ -102,8 +104,8 @@ export default function SupplierPage() {
 
             {/* Add Supplier Modal */}
             {isAdding && (
-                <div className="fixed inset-0 bg-black backdrop-blur-md z-[100] flex items-center justify-center p-4">
-                    <div className="bg-zinc-950 border-2 border-zinc-800 rounded-[56px] p-12 max-w-xl w-full relative shadow-[0_0_100px_rgba(34,197,94,0.1)]">
+                <div className="fixed inset-0 bg-black z-[100] flex items-center justify-center p-4">
+                    <div className="bg-zinc-950 border-2 border-zinc-800 rounded-[56px] p-12 max-w-xl w-full relative shadow-2xl">
                         <button
                             onClick={() => setIsAdding(false)}
                             className="absolute top-10 right-10 p-3 bg-zinc-900 border border-zinc-800 text-zinc-500 rounded-full hover:bg-zinc-800 hover:text-white transition-all hover:scale-110"
@@ -185,15 +187,15 @@ export default function SupplierPage() {
 
 function SupplierCard({ name, contact, category, rating, email, phone }: any) {
     return (
-        <div className="supplier-card bg-zinc-900 border-2 border-zinc-800 rounded-[48px] p-10 hover:border-primary/30 transition-all group shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[80px] -mr-16 -mt-16" />
+        <div className="supplier-card bg-zinc-900 border-2 border-zinc-800 rounded-[48px] p-10 hover:border-zinc-500 transition-all group shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-zinc-800 blur-[80px] -mr-16 -mt-16" />
 
             <div className="flex justify-between items-start mb-10 relative z-10">
                 <div className="w-20 h-20 bg-black border border-zinc-800 rounded-3xl flex items-center justify-center text-primary group-hover:scale-110 transition-all duration-500 shadow-2xl">
                     <Truck className="w-10 h-10" />
                 </div>
                 <div className="flex flex-col items-end gap-3">
-                    <div className="px-4 py-1.5 bg-zinc-800 text-primary border border-primary/20 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-sm">
+                    <div className="px-4 py-1.5 bg-zinc-800 text-primary border border-primary rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-sm">
                         <div className="w-2 h-2 bg-primary rounded-full animate-pulse" /> ONLINE
                     </div>
                     <div className="px-3 py-1 bg-zinc-800 text-yellow-500 rounded-xl text-[10px] font-black border border-zinc-700">

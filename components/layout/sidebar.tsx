@@ -70,20 +70,23 @@ export function Sidebar({ items }: SidebarProps) {
                             className={cn(
                                 "flex items-center justify-between px-5 py-4 rounded-[20px] text-xs font-black transition-all group border shadow-sm",
                                 isActive
-                                    ? "bg-white text-black border-white translate-x-1"
+                                    ? "bg-zinc-800 text-white border-zinc-700 translate-x-1 shadow-lg"
                                     : "bg-transparent text-zinc-500 border-transparent hover:bg-zinc-900 hover:text-white"
                             )}
                         >
                             <div className="flex items-center gap-4">
                                 <div className={cn(
                                     "transition-all duration-300",
-                                    isActive ? "text-black scale-110" : "text-zinc-600 group-hover:text-primary group-hover:scale-110"
+                                    isActive ? "text-primary scale-110" : "text-zinc-600 group-hover:text-primary group-hover:scale-110"
                                 )}>
                                     {item.icon}
                                 </div>
                                 <span className="uppercase tracking-widest">{item.label}</span>
                             </div>
-                            {isActive && <ChevronRight className="w-4 h-4 animate-in slide-in-from-left-2 duration-300" />}
+                            <div className={cn(
+                                "w-1.5 h-1.5 rounded-full transition-all duration-500",
+                                isActive ? "bg-white scale-125 shadow-[0_0_8px_rgba(255,255,255,0.8)]" : "bg-transparent"
+                            )} />
                         </Link>
                     );
                 })}

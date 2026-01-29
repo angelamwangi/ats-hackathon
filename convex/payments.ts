@@ -75,6 +75,17 @@ export const initiateMpesaStkPush = action({
     },
 });
 
+// Link an order to a checkout ID to track payment
+export const linkOrderToCheckout = mutation({
+    args: {
+        orderId: v.id("orders"),
+        checkoutId: v.string(),
+    },
+    handler: async (ctx, args) => {
+        await ctx.db.patch(args.orderId, { mpesaCheckoutId: args.checkoutId });
+    },
+});
+
 export const handleMpesaCallback = mutation({
     args: {
         body: v.any(), // The payload from Safaricom
@@ -84,13 +95,50 @@ export const handleMpesaCallback = mutation({
         const { stkCallback } = Body;
 
         if (stkCallback.ResultCode === 0) {
-            // Success! 
-            // In a real app, we'd find the order by CheckoutRequestID and update it
-            console.log("M-Pesa Payment Successful:", stkCallback.CheckoutRequestID);
+            // 1. Find the order linked to this checkout
+            const order = await ctx.db
+                .query("orders")
+                .withIndex("by_checkoutId", (q) => q.eq("mpesaCheckoutId", stkCallback.CheckoutRequestID))
+                .unique();
 
-            // Logic to update orders/loyalty would go here
+            if (order) {
+                // 2. Update Order Status
+                await ctx.db.patch(order._id, { status: "completed" });
+
+                // 3. Deduct Stock for each item
+                for (const item of order.items) {
+                    const product = await ctx.db.get(item.productId);
+                    if (product) {
+                        const newStock = Math.max(0, product.stock - item.quantity);
+                        await ctx.db.patch(product._id, { stock: newStock });
+                    }
+                }
+
+                // 4. Record the Payment
+                const mpesaReceiptNumber = stkCallback.CallbackMetadata?.Item?.find(
+                    (i: any) => i.Name === "MpesaReceiptNumber"
+                )?.Value;
+                const phoneNumber = stkCallback.CallbackMetadata?.Item?.find(
+                    (i: any) => i.Name === "PhoneNumber"
+                )?.Value;
+
+                await ctx.db.insert("payments", {
+                    orderId: order._id,
+                    vendorId: order.vendorId,
+                    amount: order.totalAmount,
+                    method: "mpesa",
+                    status: "completed",
+                    transactionId: mpesaReceiptNumber || stkCallback.CheckoutRequestID,
+                    phoneNumber: String(phoneNumber || ""),
+                    timestamp: Date.now(),
+                });
+
+                console.log(`✅ Order ${order._id} verified and stock updated via M-Pesa callback.`);
+            } else {
+                console.warn("⚠️ Callback received for unlinked CheckoutRequestID:", stkCallback.CheckoutRequestID);
+            }
         } else {
-            console.error("M-Pesa Payment Failed:", stkCallback.ResultDesc);
+            console.error("❌ M-Pesa Payment Failed:", stkCallback.ResultDesc);
         }
     },
 });

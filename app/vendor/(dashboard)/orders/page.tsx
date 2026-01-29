@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { Loader2, Truck, X, Zap, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useNexusDialog } from "@/components/providers/NexusDialogProvider";
 
 export default function VendorOrdersPage() {
     const { user } = useUser();
@@ -72,7 +73,7 @@ export default function VendorOrdersPage() {
                                                 </div>
                                             </td>
                                             <td className="p-4 font-black text-white text-lg tracking-tighter">
-                                                ${order.totalAmount.toLocaleString()}
+                                                KSh {Math.floor(order.totalAmount).toLocaleString()}
                                             </td>
                                             <td className="p-4">
                                                 <span className={cn(
@@ -121,6 +122,7 @@ function DispatchAction({ order, vendorId, suppliers, vendorPhone }: { order: an
     const executeDispatch = useAction(api.notifications.executeSupplierDispatch);
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { alert } = useNexusDialog();
     const [selectedSupplier, setSelectedSupplier] = useState<string>("");
     const [address, setAddress] = useState("");
 
@@ -145,14 +147,14 @@ function DispatchAction({ order, vendorId, suppliers, vendorPhone }: { order: an
             });
 
             if (result.sms?.success) {
-                alert("Success: Order Logged & SMS Sent via Africa's Talking.");
+                await alert("Order Dispatched", "Success: Order Logged & SMS Sent via Africa's Talking.");
                 setIsOpen(false);
             } else {
-                alert(`Notice: Order Logged, but SMS failed: ${result.sms?.error || "Check AT Dashboard"}`);
+                await alert("Dispatch Notice", `Order Logged, but SMS failed: ${result.sms?.error || "Check AT Dashboard"}`);
             }
         } catch (error) {
             console.error(error);
-            alert("Critical Error connecting to dispatch service.");
+            await alert("Dispatch Error", "Critical Error connecting to dispatch service.");
         } finally {
             setLoading(false);
         }
@@ -180,7 +182,7 @@ function DispatchAction({ order, vendorId, suppliers, vendorPhone }: { order: an
             </div>
 
             {isOpen && (
-                <div className="fixed inset-0 z-50 bg-black backdrop-blur-md flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-50 bg-black flex items-center justify-center p-4">
                     <div className="relative w-full max-w-lg bg-zinc-900 border border-zinc-700 p-10 shadow-2xl rounded-[48px] text-white">
                         <div className="space-y-4 mb-10">
                             <div className="w-16 h-16 rounded-3xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-primary mb-6">

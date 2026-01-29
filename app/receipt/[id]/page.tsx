@@ -60,12 +60,12 @@ export default function ReceiptPage() {
                                                 {item.product?.name || "Unknown Product"}
                                             </span>
                                             <span className="text-xs text-muted-foreground">
-                                                ${item.priceAtSale}/ea
+                                                KSh {Math.floor(item.priceAtSale)}/ea
                                             </span>
                                         </div>
                                     </div>
                                     <span className="font-medium">
-                                        ${(item.quantity * item.priceAtSale).toFixed(2)}
+                                        KSh {Math.floor(item.quantity * item.priceAtSale).toLocaleString()}
                                     </span>
                                 </div>
                             ))}
@@ -76,15 +76,15 @@ export default function ReceiptPage() {
                         <div className="space-y-2">
                             <div className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">Subtotal</span>
-                                <span>${order.totalAmount.toFixed(2)}</span>
+                                <span>KSh {Math.floor(order.totalAmount).toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">Taxes</span>
-                                <span>$0.00</span>
+                                <span>KSh 0</span>
                             </div>
                             <div className="flex justify-between text-lg font-bold pt-2 border-t mt-2">
                                 <span>Total</span>
-                                <span className="text-primary">${order.totalAmount.toFixed(2)}</span>
+                                <span className="text-primary">KSh {Math.floor(order.totalAmount).toLocaleString()}</span>
                             </div>
                         </div>
                     </div>

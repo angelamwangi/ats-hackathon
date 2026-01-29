@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useQuery, useAction } from "convex/react";
+import { useQuery, useAction, useMutation } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { api } from "@/convex/_generated/api";
+import { useRouter } from "next/navigation";
 import {
     ShoppingCart,
     ShoppingBag,
@@ -27,6 +28,14 @@ export default function MarketplacePage() {
     const products = useQuery(api.products.getProducts, {}) || [];
     const loyaltyCards = useQuery(api.loyalty.getUserLoyaltyCards, currentUser ? { userId: currentUser._id } : "skip");
     const cartItems = useQuery(api.cart.getCart, currentUser ? { userId: currentUser._id } : "skip") || [];
+    const router = useRouter();
+
+    // Prevent vendors from accessing marketplace
+    useEffect(() => {
+        if (currentUser?.role === "vendor") {
+            router.push("/vendor/analytics");
+        }
+    }, [currentUser, router]);
 
     const [category, setCategory] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
@@ -264,7 +273,7 @@ export default function MarketplacePage() {
                         <div className="mt-12 pt-12 border-t border-white/10 space-y-6">
                             <div className="flex justify-between items-end">
                                 <p className="text-xs font-black uppercase tracking-widest text-white">Total Acquisition</p>
-                                <p className="text-4xl font-black">${totalAmount.toFixed(2)}</p>
+                                <p className="text-4xl font-black">KSh {Math.floor(totalAmount).toLocaleString()}</p>
                             </div>
                             <button
                                 onClick={handleCheckout}
@@ -292,7 +301,6 @@ export default function MarketplacePage() {
 
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { useMutation } from "convex/react";
 
 function CartItem({ item }: { item: any }) {
     const updateQuantity = useMutation(api.cart.updateQuantity);
@@ -308,7 +316,7 @@ function CartItem({ item }: { item: any }) {
                     <h4 className="font-bold text-sm uppercase truncate max-w-[150px]">{item.product?.name}</h4>
                     <button onClick={() => removeItem({ cartId: item._id })} className="text-[10px] font-bold text-white hover:text-red-500 transition-colors uppercase">Remove</button>
                 </div>
-                <p className="text-xl font-black mb-2">${item.product?.price}</p>
+                <p className="text-xl font-black mb-2">KSh {Math.floor(item.product?.price)}</p>
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => updateQuantity({ cartId: item._id, quantity: item.quantity - 1 })}
@@ -389,7 +397,7 @@ function ProductCard({
     };
 
     return (
-        <div className="product-card group bg-white/[0.03] border border-white/10 rounded-[32px] overflow-hidden flex flex-col hover:border-white/20 transition-all">
+        <div className="product-card group bg-white/[0.03] border-2 border-white/10 rounded-[32px] overflow-hidden flex flex-col hover:border-white/20 transition-all">
             <Link href={`/consumer/product/${product._id}`} className="aspect-square bg-white/5 relative block overflow-hidden">
                 <img
                     src={product.images?.[0] || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800"}
@@ -442,7 +450,7 @@ function ProductCard({
                 <div className="flex items-center justify-between mt-auto mb-6">
                     <div>
                         <p className="text-[10px] font-black text-white uppercase">Price</p>
-                        <p className="text-2xl font-black">${product.price}</p>
+                        <p className="text-2xl font-black">KSh {Math.floor(product.price)}</p>
                     </div>
                     <div className="text-right">
                         <p className="text-[10px] font-black text-white uppercase">Value Score</p>
@@ -453,10 +461,10 @@ function ProductCard({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-4">
                     <SignedIn>
                         {!userId ? (
-                            <Link href="/sign-in?role=customer" className="col-span-2 py-3 bg-primary text-black font-black rounded-2xl text-xs hover:bg-primary/90 active:scale-95 transition-all outline-none flex items-center justify-center gap-2">
+                            <Link href="/sign-in?role=customer" className="py-3 bg-primary text-black font-black rounded-2xl text-xs hover:bg-primary/90 active:scale-95 transition-all outline-none flex items-center justify-center gap-2">
                                 COMPLETE SETUP TO BUY
                             </Link>
                         ) : (
@@ -470,25 +478,10 @@ function ProductCard({
                                 </button>
                                 <button
                                     onClick={handleSaveToBuy}
-                                    disabled={savingToBuy || isInBnpl}
-                                    className={cn(
-                                        "py-3 font-black rounded-2xl text-[10px] active:scale-95 transition-all outline-none flex items-center justify-center gap-1.5 disabled:opacity-50",
-                                        isInBnpl
-                                            ? "bg-green-500/20 text-green-500 cursor-not-allowed"
-                                            : "bg-white/10 text-white hover:bg-white/20"
-                                    )}
+                                    disabled={isInBnpl || savingToBuy}
+                                    className="py-3 bg-primary/10 text-primary font-black rounded-2xl text-xs hover:bg-primary/20 active:scale-95 transition-all outline-none border border-primary/20 disabled:opacity-50"
                                 >
-                                    {savingToBuy ? (
-                                        <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                    ) : isInBnpl ? (
-                                        <>
-                                            <CheckCircle2 className="w-3 h-3" /> IN BUY PLAN
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Wallet className="w-3 h-3" /> SAVE-TO-BUY
-                                        </>
-                                    )}
+                                    {isInBnpl ? "ALREADY IN BNPL" : savingToBuy ? "ADDING..." : "SAVE-TO-BUY"}
                                 </button>
                             </>
                         )}

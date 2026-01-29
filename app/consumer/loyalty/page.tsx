@@ -24,9 +24,12 @@ export default function ConsumerLoyaltyPage() {
     const { user, isLoaded } = useUser();
     const currentUser = useQuery(api.users.getUserByClerkId, user ? { clerkId: user.id } : "skip");
     const loyaltyCards = useQuery(api.loyalty.getUserLoyaltyCards, currentUser ? { userId: currentUser._id } : "skip");
+    const bnplPlans = useQuery(api.bnpl.getMyPlans, currentUser ? { userId: currentUser._id } : "skip");
 
-    // placeholder for active BNPL streak
-    const hasStreak = true;
+    // Calculate actual BNPL streak from plans
+    const activePlans = bnplPlans?.filter((p: any) => p.status === "active") || [];
+    const hasStreak = activePlans.length > 0;
+    const streakWeeks = activePlans.length; // Each active plan counts as a week of streak
 
     const containerRef = useRef(null);
 
@@ -77,19 +80,19 @@ export default function ConsumerLoyaltyPage() {
                     <div className="relative z-10 flex flex-col justify-between h-full">
                         <div className="space-y-2">
                             <div className="flex items-center gap-2 text-orange-500 font-black text-[10px] uppercase tracking-widest">
-                                <Flame className="w-4 h-4" /> 3-WEEK STREAK ACTIVE
+                                <Flame className="w-4 h-4" /> {hasStreak ? `${streakWeeks}-PLAN${streakWeeks > 1 ? 'S' : ''} ACTIVE` : "NO ACTIVE STREAK"}
                             </div>
                             <h3 className="text-2xl font-black uppercase tracking-tight">BNPL Power Boost</h3>
-                            <p className="text-sm text-white max-w-[200px]">Keep your streak to unlock a $10 progress bonus!</p>
+                            <p className="text-sm text-white max-w-[200px]">{hasStreak ? `Keep saving to unlock KSh ${streakWeeks * 50} progress bonus!` : "Start a Save-to-Buy plan to activate your streak!"}</p>
                         </div>
                         <div className="mt-8 flex items-center justify-between">
                             <div className="flex gap-1">
                                 {[1, 2, 3, 4].map(i => (
-                                    <div key={i} className={cn("w-2 h-8 rounded-full transition-all", i <= 3 ? "bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)]" : "bg-white/10")} />
+                                    <div key={i} className={cn("w-2 h-8 rounded-full transition-all", i <= streakWeeks ? "bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)]" : "bg-white/10")} />
                                 ))}
                             </div>
-                            <button className="text-[10px] font-black uppercase tracking-widest bg-orange-500 text-black px-4 py-2 rounded-lg hover:scale-105 transition-all">
-                                View Goals
+                            <button onClick={() => window.location.href = '/consumer/bnpl'} className="text-[10px] font-black uppercase tracking-widest bg-orange-500 text-black px-4 py-2 rounded-lg hover:scale-105 transition-all">
+                                {hasStreak ? "View Goals" : "Start Saving"}
                             </button>
                         </div>
                     </div>
@@ -224,8 +227,8 @@ export default function ConsumerLoyaltyPage() {
                         <div className="absolute inset-0 border-2 border-primary/20 border-dashed rounded-full animate-[spin_20s_linear_infinite]" />
                         <div className="w-full h-full rounded-full bg-primary/10 flex flex-col items-center justify-center text-center p-8">
                             <TrendingUp className="w-8 h-8 text-primary mb-2" />
-                            <div className="text-3xl font-black tracking-tighter">$120+</div>
-                            <div className="text-[10px] font-black uppercase text-primary tracking-widest">Est. Trade-In</div>
+                            <div className="text-3xl font-black tracking-tighter">KSh {Math.floor((currentUser?.walletBalance || 0) * 0.8)}</div>
+                            <div className="text-[10px] font-black uppercase text-primary tracking-widest">Wallet Balance</div>
                         </div>
                     </div>
                 </div>

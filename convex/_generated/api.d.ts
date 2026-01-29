@@ -9,6 +9,7 @@
  */
 
 import type * as bnpl from "../bnpl.js";
+import type * as bnpl_payments from "../bnpl_payments.js";
 import type * as branding from "../branding.js";
 import type * as cart from "../cart.js";
 import type * as consumerAnalytics from "../consumerAnalytics.js";
@@ -42,6 +43,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   bnpl: typeof bnpl;
+  bnpl_payments: typeof bnpl_payments;
   branding: typeof branding;
   cart: typeof cart;
   consumerAnalytics: typeof consumerAnalytics;

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ConvexClientProvider } from "@/components/providers/convex-client-provider";
 import { UserSync } from "@/components/providers/user-sync";
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
+import { NexusDialogProvider } from "@/components/providers/NexusDialogProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +34,10 @@ export default function RootLayout({
         <div id="clerk-captcha" className="hidden" />
         <ConvexClientProvider>
           <CSPostHogProvider>
-            <UserSync />
-            {children}
+            <NexusDialogProvider>
+              <UserSync />
+              {children}
+            </NexusDialogProvider>
           </CSPostHogProvider>
         </ConvexClientProvider>
       </body>
